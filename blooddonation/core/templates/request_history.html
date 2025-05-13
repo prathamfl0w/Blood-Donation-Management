@@ -1,0 +1,568 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .page-header {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .page-header::before {
+        content: '';
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        top: -100px;
+        right: -50px;
+        border-radius: 50%;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+        background: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .badge {
+        font-size: 0.8rem;
+        padding: 0.5em 0.8em;
+        border-radius: 30px;
+        font-weight: 500;
+    }
+    
+    .badge.bg-light {
+        background-color: rgba(255, 255, 255, 0.9) !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+    
+    .btn-gradient {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        border: none;
+        color: white;
+        border-radius: 50px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(255, 94, 98, 0.3);
+        transition: all 0.3s;
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 94, 98, 0.4);
+    }
+    
+    .btn-outline {
+        border: 2px solid #ff5e62;
+        color: #ff5e62;
+        background: transparent;
+        border-radius: 50px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-outline:hover {
+        background: rgba(255, 94, 98, 0.1);
+    }
+    
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin-right: 5px;
+        transition: all 0.3s;
+    }
+    
+    .btn-icon:hover {
+        transform: translateY(-2px);
+    }
+    
+    .btn-view {
+        background-color: rgba(13, 202, 240, 0.15);
+        color: #0dcaf0;
+        border: none;
+    }
+    
+    .btn-view:hover {
+        background-color: rgba(13, 202, 240, 0.25);
+        color: #0dcaf0;
+    }
+    
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 0.8rem;
+    }
+    
+    .table tr {
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s;
+    }
+    
+    .table tr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .table td, .table th {
+        padding: 1rem;
+        border: none;
+        background: white;
+        vertical-align: middle;
+    }
+    
+    .table th {
+        font-weight: 600;
+        color: #444;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        background: transparent;
+        font-size: 0.9rem;
+    }
+    
+    .table tr td:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    
+    .table tr td:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    
+    .status-badge {
+        padding: 0.5em 1em;
+        font-size: 0.8rem;
+        border-radius: 30px;
+    }
+    
+    .status-badge.pending {
+        background-color: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+    }
+    
+    .status-badge.approved {
+        background-color: rgba(25, 135, 84, 0.15);
+        color: #198754;
+    }
+    
+    .status-badge.rejected {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: #dc3545;
+    }
+    
+    .modal-content {
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .modal-header {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        color: white;
+        border-bottom: none;
+        padding: 1.5rem;
+    }
+    
+    .modal-body {
+        padding: 1.5rem;
+    }
+    
+    .modal-body dl {
+        margin-bottom: 0;
+    }
+    
+    .modal-body dt {
+        font-weight: 600;
+        color: #495057;
+    }
+    
+    .modal-body dd {
+        color: #343a40;
+    }
+    
+    .empty-state {
+        padding: 3rem 1rem;
+        text-align: center;
+    }
+    
+    .empty-state-icon {
+        font-size: 4rem;
+        color: #e9ecef;
+        margin-bottom: 1.5rem;
+    }
+    
+    .empty-state h5 {
+        color: #adb5bd;
+        margin-bottom: 1.5rem;
+    }
+    
+    .status-cell {
+        width: 130px;
+    }
+    
+    .actions-cell {
+        width: 80px;
+    }
+    
+    .blood-group-cell {
+        width: 100px;
+    }
+    
+    .date-cell {
+        width: 120px;
+    }
+    
+    .urgency-cell {
+        width: 120px;
+    }
+    
+    .stats-card {
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: white;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s;
+        border-left: 4px solid transparent;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-card.primary {
+        border-left-color: #ff5e62;
+    }
+    
+    .stats-card.warning {
+        border-left-color: #ffbe0b;
+    }
+    
+    .stats-card.success {
+        border-left-color: #40916c;
+    }
+    
+    .stats-card .number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-card .label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .btn-close-white {
+        filter: brightness(0) invert(1);
+    }
+    
+    /* Status indicators */
+    .status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+    }
+    
+    .status-indicator.pending {
+        background-color: #ffc107;
+    }
+    
+    .status-indicator.approved {
+        background-color: #198754;
+    }
+    
+    .status-indicator.rejected {
+        background-color: #dc3545;
+    }
+    
+    .hospital-name {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+    }
+</style>
+
+<div class="container mt-5 pt-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    {% if message.tags == 'success' %}
+                        <i class="fas fa-check-circle me-2"></i>
+                    {% elif message.tags == 'error' %}
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Page Header -->
+    <div class="page-header d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h2 class="fw-bold mb-2">
+                <i class="fas fa-history me-3"></i>
+                {% if user.is_superuser %}
+                    All Blood Requests
+                {% else %}
+                    My Blood Requests
+                {% endif %}
+            </h2>
+            <p class="mb-0 opacity-75">View and manage your blood donation requests</p>
+        </div>
+        <a href="{% url 'request_blood' %}" class="btn btn-gradient">
+            <i class="fas fa-plus me-2"></i> New Request
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Left Column - Stats -->
+        <div class="col-lg-3 mb-4">
+            <!-- Total Requests -->
+            <div class="stats-card primary shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="label">Total Requests</div>
+                        <div class="number">{{ total_count }}</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-list fa-2x" style="color: rgba(255, 94, 98, 0.2);"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pending Requests -->
+            <div class="stats-card warning shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="label">Pending</div>
+                        <div class="number">{{ pending_count }}</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-hourglass-half fa-2x" style="color: rgba(255, 190, 11, 0.2);"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Approved Requests -->
+            <div class="stats-card success shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="label">Approved</div>
+                        <div class="number">{{ approved_count|default:"0" }}</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check-circle fa-2x" style="color: rgba(64, 145, 108, 0.2);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column - Request Table -->
+        <div class="col-lg-9">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-list-ul me-2" style="color: #ff5e62;"></i>
+                    <h5 class="mb-0">Request History</h5>
+                    {% if pending_count > 0 %}
+                        <span class="badge bg-warning text-dark ms-2">{{ pending_count }} Pending</span>
+                    {% endif %}
+                </div>
+                <div class="card-body p-0">
+                    {% if requests %}
+                        <div class="table-responsive">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="date-cell">Date</th>
+                                        <th class="blood-group-cell">Blood</th>
+                                        <th>Hospital</th>
+                                        <th class="urgency-cell">Urgency</th>
+                                        <th class="status-cell">Status</th>
+                                        <th class="actions-cell">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for request in requests %}
+                                    <tr class="request-row" 
+                                        data-status="{{ request.status }}"
+                                        data-urgency="{{ request.urgency }}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="status-indicator {{ request.status }}"></div>
+                                                <span>{{ request.created_at|date:"M d, Y" }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-light text-dark">
+                                                <i class="fas fa-tint me-1" style="color: #ff5e62;"></i> {{ request.blood_group }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="hospital-name fw-medium" title="{{ request.hospital_name }}">
+                                                {{ request.hospital_name }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge {% if request.urgency == 'critical' %}bg-danger
+                                                {% elif request.urgency == 'high' %}bg-warning text-dark
+                                                {% elif request.urgency == 'medium' %}bg-info text-dark
+                                                {% else %}bg-success{% endif %}">
+                                                {{ request.urgency|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge {{ request.status }}">
+                                                <i class="fas {% if request.status == 'pending' %}fa-clock
+                                                    {% elif request.status == 'approved' %}fa-check-circle
+                                                    {% else %}fa-times-circle{% endif %} me-1"></i>
+                                                {{ request.status|title }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-icon btn-view" data-bs-toggle="modal" 
+                                                    data-bs-target="#detailsModal{{ request.id }}" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Details Modal -->
+                                    <div class="modal fade" id="detailsModal{{ request.id }}" tabindex="-1">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Request Details</h5>
+                                                    <button type="button" class="btn-close btn-close-white" 
+                                                            data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="mb-4 text-center">
+                                                        <span class="badge {% if request.urgency == 'critical' %}bg-danger
+                                                            {% elif request.urgency == 'high' %}bg-warning text-dark
+                                                            {% elif request.urgency == 'medium' %}bg-info text-dark
+                                                            {% else %}bg-success{% endif %} px-4 py-2">
+                                                            {{ request.urgency|title }} Priority
+                                                        </span>
+                                                        <span class="status-badge {{ request.status }} ms-2 px-4 py-2">
+                                                            <i class="fas {% if request.status == 'pending' %}fa-clock
+                                                                {% elif request.status == 'approved' %}fa-check-circle
+                                                                {% else %}fa-times-circle{% endif %} me-1"></i>
+                                                            {{ request.status|title }}
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <div class="row mb-4">
+                                                        <div class="col-6 text-center">
+                                                            <div class="p-3 rounded" style="background-color: rgba(255, 94, 98, 0.1);">
+                                                                <h6 class="text-muted mb-1">Blood Type</h6>
+                                                                <h4 class="mb-0" style="color: #ff5e62;">{{ request.blood_group }}</h4>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 text-center">
+                                                            <div class="p-3 rounded" style="background-color: rgba(13, 202, 240, 0.1);">
+                                                                <h6 class="text-muted mb-1">Date Requested</h6>
+                                                                <h4 class="mb-0" style="color: #0dcaf0;">{{ request.created_at|date:"M d, Y" }}</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <h6 class="mb-3 border-bottom pb-2" style="color: #ff5e62;">Hospital Information</h6>
+                                                    <div class="mb-3">
+                                                        <p class="mb-1"><strong>Name:</strong> {{ request.hospital_name }}</p>
+                                                        <p class="mb-0"><strong>Address:</strong> {{ request.hospital_address }}</p>
+                                                    </div>
+                                                    
+                                                    <h6 class="mb-3 border-bottom pb-2" style="color: #ff5e62;">Contact Information</h6>
+                                                    <div class="mb-3">
+                                                        <p class="mb-1"><strong>Contact Name:</strong> {{ request.contact_name }}</p>
+                                                        <p class="mb-0"><strong>Contact Number:</strong> {{ request.contact_number }}</p>
+                                                    </div>
+                                                    
+                                                    {% if request.additional_notes %}
+                                                    <h6 class="mb-3 border-bottom pb-2" style="color: #ff5e62;">Additional Notes</h6>
+                                                    <p class="mb-0">{{ request.additional_notes }}</p>
+                                                    {% endif %}
+                                                </div>
+                                                
+                                                <div class="modal-footer justify-content-center border-0">
+                                                    <button type="button" class="btn btn-outline" data-bs-dismiss="modal">
+                                                        <i class="fas fa-times me-2"></i>Close
+                                                    </button>
+                                                    {% if request.status == 'approved' %}
+                                                    <a href="tel:{{ request.contact_number }}" class="btn btn-gradient">
+                                                        <i class="fas fa-phone-alt me-2"></i>Call Contact
+                                                    </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-file-medical-alt"></i>
+                            </div>
+                            <h5>No blood requests found</h5>
+                            <a href="{% url 'request_blood' %}" class="btn btn-gradient">
+                                <i class="fas fa-plus me-2"></i>Make Your First Request
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Filtering script removed - no longer needed
+</script>
+{% endblock %}

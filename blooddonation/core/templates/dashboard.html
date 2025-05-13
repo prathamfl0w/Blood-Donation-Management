@@ -1,0 +1,876 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LifeFlow</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        
+        /* Improved Sidebar Styling */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+            padding-top: 1rem;
+            transition: all 0.4s ease;
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            border-radius: 0 15px 15px 0;
+        }
+        
+        .sidebar.collapsed {
+            width: 80px;
+        }
+        
+        .sidebar-brand {
+            padding: 15px 25px;
+            margin-bottom: 35px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-brand h2 {
+            color: white;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0;
+            transition: all 0.3s;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .sidebar-brand a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sidebar-brand img {
+            width: 40px;
+            margin-right: 15px;
+            transition: all 0.3s;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+        }
+        
+        .sidebar.collapsed .sidebar-brand h2 {
+            display: none;
+        }
+        
+        .sidebar.collapsed .sidebar-brand img {
+            margin-right: 0;
+            margin-left: 8px;
+        }
+        
+        /* Menu Categories */
+        .menu-category {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            padding: 25px 25px 10px;
+            margin: 0;
+            transition: all 0.3s;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar.collapsed .menu-category {
+            display: none;
+        }
+        
+        /* Menu Items */
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 15px 0;
+        }
+        
+        .sidebar-menu li {
+            position: relative;
+            margin: 8px 15px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+        
+        .sidebar-menu li.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar-menu li a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .sidebar-menu li a i {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+            margin-right: 15px;
+            transition: all 0.3s;
+            opacity: 0.9;
+        }
+        
+        .sidebar-menu li a span {
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .sidebar.collapsed .sidebar-menu li {
+            margin: 8px;
+            text-align: center;
+        }
+        
+        .sidebar.collapsed .sidebar-menu li a i {
+            margin-right: 0;
+            font-size: 1.3rem;
+        }
+        
+        .sidebar.collapsed .sidebar-menu li a span {
+            display: none;
+        }
+        
+        .sidebar-divider {
+            height: 1px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            margin: 20px 20px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar.collapsed .sidebar-divider {
+            margin: 20px 10px;
+        }
+        
+        /* Active link highlight */
+        .sidebar-menu li a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background-color: white;
+            opacity: 0.15;
+            transition: width 0.4s ease;
+            border-radius: 12px;
+        }
+        
+        .sidebar-menu li a:hover::before,
+        .sidebar-menu li.active a::before {
+            width: 100%;
+        }
+        
+        /* Toggle Button */
+        #sidebarToggle {
+            background: rgba(255, 255, 255, 0.18);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff5e62;
+            transition: all 0.4s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        #sidebarToggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(180deg);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Main Content Adjustments */
+        .main-content {
+            margin-left: 280px;
+            padding: 25px;
+            transition: all 0.4s ease;
+        }
+        
+        .main-content.expanded {
+            margin-left: 80px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.25rem 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        .search-container {
+            position: relative;
+            width: 350px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            border-radius: 30px;
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 94, 98, 0.1);
+            border-color: #ff5e62;
+            background-color: white;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            border: none;
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.18);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at top right, rgba(255, 255, 255, 0.3), transparent 70%);
+            z-index: -1;
+        }
+        
+        .stat-card .card-body {
+            padding: 1.5rem;
+        }
+        
+        .stat-card h5.card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .stat-card h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Enhanced menu items with notification indicators */
+        .sidebar-menu li a {
+            color: white;
+            padding: 14px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            position: relative;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .sidebar-menu li a i {
+            font-size: 1.2rem;
+            width: 28px;
+            text-align: center;
+            margin-right: 15px;
+            transition: all 0.3s;
+            opacity: 0.9;
+        }
+        
+        /* Add notification badge */
+        .notification-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background-color: #ffffff;
+            color: #ff5e62;
+            font-size: 0.7rem;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Add right arrow icon for menu items */
+        .sidebar-menu li a::after {
+            content: '\f054';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            font-size: 0.7rem;
+            margin-left: auto;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-menu li:hover a::after {
+            transform: translateX(3px);
+            opacity: 1;
+        }
+        
+        .sidebar.collapsed .sidebar-menu li a::after {
+            display: none;
+        }
+
+        .dropdown-menu {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 0;
+            margin-top: 10px;
+            min-width: 240px;
+        }
+
+        .dropdown-item {
+            padding: 0.7rem 1.5rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 94, 98, 0.1);
+            color: #ff5e62;
+        }
+
+        .dropdown-item.text-danger:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .dropdown-item-text {
+            font-weight: 600;
+            color: #444;
+            padding: 0.7rem 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .dropdown-divider {
+            margin: 0.5rem 0;
+            opacity: 0.1;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-header {
+            background: white;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Improved Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <!-- Sidebar Brand -->
+        <div class="sidebar-brand">
+            <a href="{% url 'home' %}">
+                <img src="https://img.icons8.com/color/96/null/drop-of-blood.png" alt="LifeFlow Logo">
+                <h2>LifeFlow</h2>
+            </a>
+        </div>
+        
+        <!-- User Dashboard Section -->
+        <p class="menu-category">Dashboard</p>
+        <ul class="sidebar-menu">
+            <li class="active">
+                <a href="{% url 'dashboard' %}">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Donation Management Section -->
+        <p class="menu-category">Blood Management</p>
+        <ul class="sidebar-menu">
+            {% if user.is_superuser %}
+                <li>
+                    <a href="{% url 'admin_donations' %}">
+                        <i class="fas fa-hand-holding-medical"></i>
+                        <span>Manage Donations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'admin_requests' %}">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>Manage Requests</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'request_history' %}">
+                        <i class="fas fa-history"></i>
+                        <span>Request History</span>
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'donate' %}">
+                        <i class="fas fa-donate"></i>
+                        <span>Donate Blood</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'request_blood' %}">
+                        <i class="fas fa-hand-holding-medical"></i>
+                        <span>Request Blood</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'request_history' %}">
+                        <i class="fas fa-history"></i>
+                        <span>My Request History</span>
+                        <div class="notification-badge">2</div>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        
+        <!-- Appointments Section -->
+        {% if not user.is_superuser %}
+        <p class="menu-category">Appointments</p>
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{% url 'book_appointment' %}">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span>Book Appointments</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'my_appointments' %}">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>My Appointments</span>
+                    <div class="notification-badge">1</div>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'calendar' %}">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </a>
+            </li>
+        </ul>
+        {% endif %}
+        
+        <div class="sidebar-divider"></div>
+        
+        <!-- User Section -->
+        <ul class="sidebar-menu">
+            <li>
+                <a href="{% url 'profile' %}">
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Header -->
+        <div class="header">
+            <button class="btn" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Search...">
+                <span class="search-icon"><i class="fas fa-search"></i></span>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-link dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown">
+                    <i class="fas fa-user-circle fa-2x" style="color: #ff5e62;"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><span class="dropdown-item-text">{{ user.username }}</span></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="{% url 'profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card stat-card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total Blood Donations</h5>
+                        <h2 class="mb-0">{{ total_donations }}</h2>
+                        {% if user.is_superuser %}
+                        <small class="text-white-50">All donations in system</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card bg-warning text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if user.is_superuser %}
+                                All Pending Requests
+                            {% else %}
+                                My Pending Requests
+                            {% endif %}
+                        </h5>
+                        <h2 class="mb-0">{{ pending_requests }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if user.is_superuser %}
+                                Total Available Units
+                            {% else %}
+                                My Available Units
+                            {% endif %}
+                        </h5>
+                        <h2 class="mb-0">{{ available_units }}</h2>
+                        <small class="text-white-50">1 unit = 450ml</small>
+                        <div class="mt-1">
+                            <small class="text-white-50">Total: {{ available_units_ml }}ml</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stat-card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if user.is_superuser %}
+                                Total Appointments
+                            {% else %}
+                                My Appointments
+                            {% endif %}
+                        </h5>
+                        <h2 class="mb-0">{{ total_appointments }}</h2>
+                        {% if not user.is_superuser  %}
+                        <div class="mt-2 small">
+                            <span class="badge bg-warning">Pending: {{ appointments_stats.pending }}</span>
+                            <span class="badge bg-success">Confirmed: {{ appointments_stats.confirmed }}</span>
+                            <span class="badge bg-danger">Cancelled: {{ appointments_stats.cancelled }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        Overall Blood Donation Statistics
+                        <small class="text-muted d-block">Showing data for all donations (Total: {{ total_system_donations }})</small>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="donationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        Blood Statistics
+                        <small class="text-muted d-block">Data Source: {{ data_source }}</small>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="bloodTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blood Bank Dashboard -->
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Blood Bank Dashboard</h2>
+                    <p class="text-muted">Data Source: {{ data_source }}</p>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                {% if blood_stats %}
+                    {% for blood_group, count in blood_stats.items %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ blood_group }}</h5>
+                                <p class="card-text">Available Units: {{ count }}</p>
+                                <small class="text-muted">{{ count|multiply:450 }} ml</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-warning">
+                            No blood statistics available
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h3>Recent Donations</h3>
+                    {% if donations %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Donor</th>
+                                        <th>Blood Group</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for donation in donations %}
+                                    <tr>
+                                        <td>{{ donation.donor_name }}</td>
+                                        <td>{{ donation.blood_group }}</td>
+                                        <td>{{ donation.amount_ml }} ml</td>
+                                        <td>{{ donation.donation_date }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ donation.status|status_color }}">
+                                                {{ donation.status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recent donations</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.is_superuser %}
+            <div class="row mt-4">
+                <div class="col-12">
+                    <h3>All Blood Donations</h3>
+                    {% if donations %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Donor</th>
+                                    <th>Blood Group</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for donation in donations %}
+                                <tr>
+                                    <td>{{ donation.donor_name }}</td>
+                                    <td>{{ donation.blood_group }}</td>
+                                    <td>{{ donation.amount_ml }} ml</td>
+                                    <td>{{ donation.donation_date }}</td>
+                                    <td><span class="badge bg-{{ donation.status|status_color }}">{{ donation.status }}</span></td>
+                                    <td>{{ donation.city }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No donations recorded yet</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar Toggle
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('main-content').classList.toggle('expanded');
+        });
+
+        // Donation Bar Chart
+        const ctx = document.getElementById('donationChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+                datasets: [{
+                    label: 'Blood Donations',
+                    data: {{ blood_data|safe }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.5)',
+                        'rgba(54, 162, 235, 0.5)',
+                        'rgba(255, 206, 86, 0.5)',
+                        'rgba(75, 192, 192, 0.5)',
+                        'rgba(153, 102, 255, 0.5)',
+                        'rgba(255, 159, 64, 0.5)',
+                        'rgba(245, 66, 66, 0.5)',
+                        'rgba(104, 132, 245, 0.5)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(245, 66, 66, 1)',
+                        'rgba(104, 132, 245, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Blood Type Pie Chart
+        const btCtx = document.getElementById('bloodTypeChart').getContext('2d');
+        new Chart(btCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+                datasets: [{
+                    label: 'Blood Types',
+                    data: {{ blood_data|safe }},
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(245, 66, 66, 0.7)',
+                        'rgba(104, 132, 245, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(245, 66, 66, 1)',
+                        'rgba(104, 132, 245, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+        
+        // Set active menu item
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUrl = window.location.pathname;
+            const menuItems = document.querySelectorAll('.sidebar-menu li a');
+            
+            menuItems.forEach(item => {
+                const itemUrl = item.getAttribute('href');
+                if (currentUrl.includes(itemUrl) && itemUrl !== '/') {
+                    item.parentElement.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1191 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<header class="hero-section text-center">
+    <div class="hero-container"
+        style="background: linear-gradient(135deg, #ff5e62 0%, #ff9966 100%);
+               height: 90vh; 
+               padding: 20px; 
+               border-radius: 20px; 
+               margin: 15px 30px;
+               display: flex;
+               align-items: center;
+               justify-content: center;
+               position: relative;
+               overflow: hidden;
+               box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);">
+        
+        <!-- Decorative circle elements -->
+        <div class="decorative-circle" style="position: absolute; top: -15%; left: -10%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%); z-index: 1;"></div>
+        <div class="decorative-circle" style="position: absolute; bottom: -20%; right: -10%; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%); z-index: 1;"></div>
+        
+        <!-- Animated blood cells with subtle pulse effect -->
+        <div class="blood-cell-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 2;">
+            <!-- Larger blood cells in background -->
+            <div class="blood-cell" style="position: absolute; width: 100px; height: 100px; top: 15%; left: 10%; background: rgba(255,255,255,0.15); border-radius: 50%; filter: blur(2px); animation: float-slow 15s infinite ease-in-out, pulse 6s infinite alternate;"></div>
+            <div class="blood-cell" style="position: absolute; width: 80px; height: 80px; bottom: 20%; left: 20%; background: rgba(255,255,255,0.12); border-radius: 50%; filter: blur(2px); animation: float-slow 18s infinite ease-in-out, pulse 7s infinite alternate;"></div>
+            <div class="blood-cell" style="position: absolute; width: 120px; height: 120px; top: 60%; right: 15%; background: rgba(255,255,255,0.1); border-radius: 50%; filter: blur(3px); animation: float-slow 20s infinite ease-in-out, pulse 8s infinite alternate;"></div>
+            
+            <!-- Medium blood cells -->
+            <div class="blood-cell" style="position: absolute; width: 60px; height: 60px; top: 30%; right: 25%; background: rgba(255,255,255,0.15); border-radius: 50%; filter: blur(1px); animation: float-medium 12s infinite ease-in-out, pulse 5s infinite alternate;"></div>
+            <div class="blood-cell" style="position: absolute; width: 70px; height: 70px; bottom: 35%; right: 30%; background: rgba(255,255,255,0.18); border-radius: 50%; filter: blur(1px); animation: float-medium 14s infinite ease-in-out, pulse 6s infinite alternate;"></div>
+            
+            <!-- Smaller blood cells in foreground -->
+            <div class="blood-cell" style="position: absolute; width: 30px; height: 30px; top: 25%; left: 35%; background: rgba(255,255,255,0.25); border-radius: 50%; animation: float-fast 8s infinite ease-in-out, pulse 4s infinite alternate;"></div>
+            <div class="blood-cell" style="position: absolute; width: 25px; height: 25px; bottom: 30%; right: 40%; background: rgba(255,255,255,0.2); border-radius: 50%; animation: float-fast 10s infinite ease-in-out, pulse 3s infinite alternate;"></div>
+            <div class="blood-cell" style="position: absolute; width: 20px; height: 20px; top: 50%; left: 50%; background: rgba(255,255,255,0.3); border-radius: 50%; animation: float-fast 7s infinite ease-in-out, pulse 4s infinite alternate;"></div>
+        </div>
+        
+        <!-- Enhanced wave animation at the bottom -->
+        <div class="wave-container" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 200px; overflow: hidden; z-index: 3;">
+            <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+                <path d="M0,50 C150,150 350,0 500,50 L500,150 L0,150 Z" style="stroke: none; fill: rgba(255,255,255,0.1);"></path>
+                <path d="M0,80 C150,180 350,30 500,80 L500,150 L0,150 Z" style="stroke: none; fill: rgba(255,255,255,0.07);"></path>
+                <path d="M0,100 C150,200 350,50 500,100 L500,150 L0,150 Z" style="stroke: none; fill: rgba(255,255,255,0.05);"></path>
+            </svg>
+        </div>
+        
+        <!-- Enhanced hero content with fade-in animation -->
+        <div class="hero-content text-center" style="z-index: 5; max-width: 750px; padding: 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(15px); border-radius: 30px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 30px 70px rgba(0,0,0,0.15), 0 0 35px rgba(255,255,255,0.15); animation: fadeIn 1.5s ease-out;">
+            <div class="hero-content-inner" style="position: relative; z-index: 1;">
+                <!-- Subtle glow effect behind content -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%); z-index: -1; filter: blur(30px);"></div>
+                
+                <!-- Updated title with consistent styling for both lines -->
+                <h1 class="hero-title" style="color: white; font-size: 4rem; font-weight: 800; margin-bottom: 35px; text-shadow: 0 3px 15px rgba(0,0,0,0.2); line-height: 1.2;">
+                    <span class="small-drop-text" style="display: block; letter-spacing: 5px; color: white !important; position: relative; cursor: pointer; transition: transform 0.4s ease; animation: fadeInUp 1.2s ease-out; font-weight: 600; margin-bottom: 15px;">
+                        Small Drop,
+                        <span class="hover-glow" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%); opacity: 0; filter: blur(10px); transition: opacity 0.5s ease;"></span>
+                    </span>
+                    <span class="endless-impact-text" style="display: block; letter-spacing: 5px; color: white !important; position: relative; cursor: pointer; transition: transform 0.4s ease; animation: fadeInUp 1.5s ease-out;">
+                        Endless Impact.
+                        <span class="hover-glow" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%); opacity: 0; filter: blur(10px); transition: opacity 0.5s ease;"></span>
+                    </span>
+                </h1>
+                
+                <!-- Paragraph with fade-in animation -->
+                <p style="color: white; font-size: 1.35rem; margin-bottom: 40px; opacity: 0.95; line-height: 1.6; font-weight: 400; animation: fadeInUp 1.8s ease-out;">Every donation can save up to three lives. Be a hero today by becoming a blood donor with LifeFlow.</p>
+                
+                <div class="mt-5 text-center" style="animation: fadeInUp 2.1s ease-out;">
+                    {% if user.is_authenticated %}
+                    <p class="lead" style="color: white; font-size: 1.6rem; font-weight: 500; margin-bottom: 25px;">
+                        Welcome <span style="color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.9);">{{ user.username }}</span>!
+                    </p>
+                    <a href="{% url 'donate' %}" class="btn btn-lg hero-button" style="
+                        background-color: white;
+                        color: #ff5e62;
+                        font-weight: 700;
+                        padding: 16px 38px;
+                        border-radius: 50px;
+                        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+                        transition: all 0.3s ease;
+                        font-size: 1.15rem;
+                        position: relative;
+                        overflow: hidden;
+                        z-index: 1;
+                        letter-spacing: 0.5px;">
+                        <i class="fas fa-heartbeat me-2" style="color: #ff5e62;"></i> Schedule a Donation
+                    </a>
+                    {% else %}
+                    <a href="{% url 'register' %}" class="hero-donate-btn" style="
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        background-color: white;
+                        color: #ff5e62 !important;
+                        font-weight: 700;
+                        padding: 16px 38px;
+                        border-radius: 50px;
+                        border: none;
+                        position: relative;
+                        overflow: hidden;
+                        z-index: 1;
+                        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                        box-shadow: 0 15px 30px rgba(0,0,0,0.15), 0 0 15px rgba(255,255,255,0.2);
+                        margin-top: 15px;
+                        text-decoration: none;
+                        font-size: 1.15rem;
+                        letter-spacing: 0.5px;">
+                        <span class="icon-container" style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 34px;
+                            height: 34px;
+                            background: rgba(255, 94, 98, 0.1);
+                            border-radius: 50%;
+                            margin-right: 12px;
+                            position: relative;
+                            overflow: hidden;">
+                            <i class="fas fa-hand-holding-heart" style="color: #ff5e62; font-size: 1rem; position: relative; z-index: 2;"></i>
+                            <span class="icon-ripple" style="
+                                position: absolute;
+                                width: 100%;
+                                height: 100%;
+                                background: radial-gradient(circle, rgba(255,94,98,0.2) 0%, transparent 70%);
+                                transform: scale(0);
+                                opacity: 0;
+                                transition: all 0.5s ease;"></span>
+                        </span>
+                        Become a Donor!
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Stats Section - New section to fill the blank space -->
+<div class="section-container" style="margin-top: -20px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
+    <div class="row text-center">
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="padding: 20px; border-radius: 10px; background-color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: linear-gradient(45deg, #ff5e62, #ff9966); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-heartbeat" style="font-size: 1.5rem; color: white;"></i>
+                </div>
+                <h3 style="color: #333; font-size: 2rem; font-weight: 700; margin-bottom: 5px;" class="counter">5,000+</h3>
+                <p style="color: #777; font-size: 0.9rem; margin-bottom: 0;">Donations Made</p>
+            </div>
+        </div>
+        
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="padding: 20px; border-radius: 10px; background-color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: linear-gradient(45deg, #ff5e62, #ff9966); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-users" style="font-size: 1.5rem; color: white;"></i>
+                </div>
+                <h3 style="color: #333; font-size: 2rem; font-weight: 700; margin-bottom: 5px;" class="counter">2,500+</h3>
+                <p style="color: #777; font-size: 0.9rem; margin-bottom: 0;">Regular Donors</p>
+            </div>
+        </div>
+        
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="padding: 20px; border-radius: 10px; background-color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: linear-gradient(45deg, #ff5e62, #ff9966); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-hospital" style="font-size: 1.5rem; color: white;"></i>
+                </div>
+                <h3 style="color: #333; font-size: 2rem; font-weight: 700; margin-bottom: 5px;" class="counter">50+</h3>
+                <p style="color: #777; font-size: 0.9rem; margin-bottom: 0;">Partner Hospitals</p>
+            </div>
+        </div>
+        
+        <div class="col-6 col-md-3">
+            <div class="stat-card" style="padding: 20px; border-radius: 10px; background-color: white; box-shadow: 0 8px 20px rgba(0,0,0,0.05); transition: all 0.3s ease;">
+                <div style="width: 60px; height: 60px; margin: 0 auto 15px; background: linear-gradient(45deg, #ff5e62, #ff9966); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-heart" style="font-size: 1.5rem; color: white;"></i>
+                </div>
+                <h3 style="color: #333; font-size: 2rem; font-weight: 700; margin-bottom: 5px;" class="counter">15,000+</h3>
+                <p style="color: #777; font-size: 0.9rem; margin-bottom: 0;">Lives Saved</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Blood Type Information -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div style="background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%); border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; right: 0; width: 150px; height: 150px; background: linear-gradient(45deg, rgba(255,94,98,0.1) 0%, rgba(255,153,102,0.1) 100%); border-radius: 0 0 0 100%; z-index: 0;"></div>
+                
+                <h3 style="color: #e62236; font-size: 1.5rem; margin-bottom: 20px; position: relative; z-index: 1;">Blood Type Compatibility-</h3>
+                
+                <div class="row g-3">
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">A+</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">A+, A-, O+, O-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">B+</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">B+, B-, O+, O-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">AB+</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">All Types</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">O-</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">O- Only</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">A-</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">A-, O-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">B-</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">B-, O-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">AB-</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">AB-, A-, B-, O-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-6 col-md-3">
+                        <div style="background-color: white; border-radius: 10px; padding: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); height: 100%; transition: all 0.3s ease;">
+                            <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div style="width: 40px; height: 40px; background-color: #e62236; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin-right: 10px;">O+</div>
+                                <div>
+                                    <p style="margin: 0; font-size: 0.85rem; color: #666;">Can receive from:</p>
+                                    <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #333;">O+, O-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- General styles for the entire page -->
+<style>
+    /* Global heading enhancements for the entire site */
+    h1, h2, h3, h4, h5, h6 {
+        color: #000000;
+        font-family: 'Poppins', sans-serif;
+        letter-spacing: -0.02em;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+    
+    /* Section titles throughout the site */
+    .section-title {
+        font-size: 2.2rem;
+        color: #000000 !important;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+        padding-bottom: 0.8rem;
+        text-transform: capitalize;
+    }
+    
+    /* Elegant underline effect for section titles */
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(to right, #ff5e62, #ff9966);
+        border-radius: 3px;
+    }
+    
+    /* Specific styling for "Why Donate Blood?" title */
+    .section-container .title-wrapper h2.section-title {
+        background: linear-gradient(to right, #000, #222);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent !important;
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        font-weight: 800;
+    }
+    
+    /* Enhance heading styles in cards/sections */
+    .card-title, .reason h4 {
+        color: #000000 !important;
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+    
+    /* Subtle underline for card titles */
+    .card-title::after, .reason h4::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(to right, #ff5e62, #ff9966);
+        border-radius: 2px;
+        opacity: 0.8;
+        transition: all 0.3s ease;
+    }
+    
+    /* Center the underline for card titles that are centered */
+    .text-center .card-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    /* Extend underline on hover */
+    .card:hover .card-title::after, .reason:hover h4::after {
+        width: 60px;
+    }
+    
+    /* Enhance blog post titles */
+    .blog-title {
+        color: #000000 !important;
+        font-size: 1.4rem;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+    
+    /* Text gradients for hero section headings */
+    .hero-title {
+        background: linear-gradient(45deg, #000000, #333333);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent !important;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+    }
+    
+    /* Additional refinements for all headings */
+    h2, h3 {
+        margin-bottom: 1.2rem;
+    }
+    
+    h4, h5, h6 {
+        margin-bottom: 1rem;
+    }
+    
+    /* Prevent any unwanted text shadows */
+    .section-title, .card-title, .reason h4, .blog-title {
+        text-shadow: none !important;
+    }
+    
+    /* Enhanced reason cards */
+    .reason {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04) !important;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.03);
+        padding: 1.5rem;
+        overflow: hidden;
+    }
+    
+    .reason:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.07) !important;
+    }
+    
+    /* Ensure reason heading alignment */
+    .reason h4 {
+        text-align: left;
+    }
+    
+    /* Remove any vertical bars on the left */
+    .reason::before {
+        display: none;
+    }
+    
+    /* Animations and general styles */
+    @keyframes float-slow {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+        }
+        50% {
+            transform: translateY(-20px) translateX(15px);
+        }
+    }
+    
+    @keyframes float-medium {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+        }
+        50% {
+            transform: translateY(-15px) translateX(10px);
+        }
+    }
+    
+    @keyframes float-fast {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+        }
+        50% {
+            transform: translateY(-10px) translateX(5px);
+        }
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.7;
+        }
+        100% {
+            transform: scale(1.05);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .section-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 40px 30px;
+        border-radius: 15px;
+        margin: 20px 30px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .section-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 10% 20%, rgba(255, 94, 98, 0.03) 0%, transparent 60%),
+            radial-gradient(circle at 90% 50%, rgba(255, 153, 102, 0.03) 0%, transparent 70%);
+        z-index: 0;
+    }
+    
+    .section-container .row {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(to right, #ff5e62, #ff9966);
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 3px;
+    }
+    
+    .btn-custom {
+        background: linear-gradient(45deg, #ff5e62, #ff9966);
+        color: white;
+        font-weight: 600;
+        padding: 10px 25px;
+        border-radius: 30px;
+        border: none;
+        box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+        transition: all 0.3s ease;
+        display: inline-block;
+        text-decoration: none;
+    }
+    
+    .btn-custom:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(255, 94, 98, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .hero-container .btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    
+    /* Card styling */
+    .card {
+        background-color: white;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Stats card animation */
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Blood type card animation */
+    .col-md-3 > div:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Social icons style */
+    .social-icon {
+        display: inline-block;
+        margin: 0 10px;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        background: linear-gradient(45deg, #ff5e62, #ff9966);
+        color: white;
+        border-radius: 50%;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .social-icon:hover {
+        transform: translateY(-8px) scale(1.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Form controls */
+    .form-control {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .form-control:focus {
+        box-shadow: 0 0 0 3px rgba(255, 94, 98, 0.2);
+        border-color: #ff5e62;
+    }
+    
+    /* Reason cards */
+    .reason {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+    }
+    
+    .reason::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 0;
+        background: linear-gradient(to bottom, #ff5e62, #ff9966);
+        transition: all 0.3s ease;
+        z-index: -1;
+    }
+    
+    .reason:hover::before {
+        height: 100%;
+    }
+    
+    .reason:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    .icon {
+        width: 40px;
+        height: 40px;
+        margin-right: 15px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+    }
+    
+    .reason:hover .icon {
+        transform: scale(1.1);
+    }
+    
+    /* Team member styling */
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        transition: all 0.3s ease;
+        border: 4px solid white;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card:hover .profile-pic {
+        transform: scale(1.1);
+        box-shadow: 0 8px 25px rgba(255, 94, 98, 0.3);
+    }
+    
+    /* Section title wrapper for better visibility */
+    .title-wrapper {
+        text-align: center;
+        margin-bottom: 30px;
+        position: relative;
+        z-index: 5;
+    }
+    
+    .hero-donate-btn:hover, .hero-button:hover {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2), 0 0 30px rgba(255,255,255,0.3);
+    }
+    
+    .hero-donate-btn:hover .icon-container {
+        transform: rotate(10deg) scale(1.1);
+        transition: all 0.3s ease;
+    }
+    
+    .hero-donate-btn:hover .icon-ripple {
+        transform: scale(2);
+        opacity: 1;
+    }
+    
+    .hero-donate-btn:active {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+    }
+    
+    .hero-donate-btn i {
+        transition: all 0.3s ease;
+    }
+    
+    .hero-donate-btn:hover i {
+        transform: scale(1.2);
+    }
+    
+    @keyframes float-micro {
+        0% { transform: translateY(0) rotate(0deg); }
+        25% { transform: translateY(-3px) rotate(3deg); }
+        50% { transform: translateY(0) rotate(0deg); }
+        75% { transform: translateY(3px) rotate(-3deg); }
+        100% { transform: translateY(0) rotate(0deg); }
+    }
+    
+    .icon-container {
+        animation: float-micro 3s infinite ease-in-out;
+    }
+    
+    /* Add styling specifically for Connect With Us and similar headings */
+    .card h3, .card h4, .card h5 {
+        color: #000000 !important;
+        font-family: 'Poppins', sans-serif;
+        position: relative;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+        font-weight: 700;
+        text-shadow: none !important;
+    }
+    
+    /* Add decorative underline for these headings */
+    .card h3::after, .card h4::after, .card h5::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(to right, #ff5e62, #ff9966);
+        border-radius: 2px;
+        transition: all 0.3s ease;
+    }
+    
+    /* Center the underline for centered headings */
+    .text-center h3::after, .text-center h4::after, .text-center h5::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    /* Remove any inline styles that might override our styles */
+    .card h3[style], .card h4[style], .card h5[style] {
+        color: #000000 !important;
+    }
+    
+    /* Special styling for "Get In Touch" heading */
+    .card .text-center h3 {
+        font-size: 1.8rem;
+        letter-spacing: -0.02em;
+    }
+    
+    /* Special styling for "Connect With Us" heading */
+    .card .text-center h4 {
+        font-size: 1.4rem;
+        letter-spacing: -0.01em;
+    }
+    
+    /* Special styling for contact info headings */
+    .card h5 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    
+    /* Style for "Send Us a Message" heading */
+    .card h3:not(.text-center) {
+        font-size: 1.8rem;
+        letter-spacing: -0.02em;
+        padding-bottom: 12px;
+    }
+    
+    /* Hover effects for heading underlines */
+    .card:hover h3::after, .card:hover h4::after {
+        width: 60px;
+    }
+    
+    /* Contact info container styling */
+    .contact-info-container {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 30px;
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    /* Individual contact item styling */
+    .contact-info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    
+    /* Icon container styling */
+    .contact-icon {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        background: linear-gradient(45deg, #ff5e62, #ff9966);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        box-shadow: 0 5px 15px rgba(255, 94, 98, 0.2);
+    }
+    
+    /* Contact text container */
+    .contact-text {
+        text-align: left;
+    }
+    
+    /* Contact heading */
+    .contact-text h5 {
+        color: #000000 !important;
+        margin-bottom: 5px;
+        font-weight: 600;
+        text-align: left;
+        padding-bottom: 0;
+        text-shadow: none !important;
+    }
+    
+    /* Remove decorative underline */
+    .contact-text h5::after {
+        display: none;
+    }
+    
+    /* Contact paragraph */
+    .contact-text p {
+        color: #666;
+        margin: 0;
+        text-align: left;
+    }
+    
+    /* Social icons section */
+    .social-section {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    /* Social section heading */
+    .social-section h4 {
+        color: #000000 !important;
+        text-shadow: none !important;
+        margin-bottom: 15px;
+    }
+    
+    /* Hover animations for the text */
+    .small-drop-text:hover .hover-glow,
+    .endless-impact-text:hover .hover-glow {
+        opacity: 1;
+    }
+    
+    .small-drop-text:hover,
+    .endless-impact-text:hover {
+        transform: scale(1.02);
+    }
+    
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    
+    .social-link {
+        transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+</style>
+
+<!-- Why Donate Section -->
+<div class="section-container">
+    <div class="title-wrapper">
+        <h2 class="section-title text-center">Why Donate Blood?</h2>
+    </div>
+    
+    <div class="row align-items-center">
+        <!-- Left Side: Image -->
+        <div class="col-md-6">
+            <div style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); position: relative;">
+                <!-- Gradient overlay -->
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, rgba(255,94,98,0.2) 0%, rgba(255,153,102,0.2) 100%); z-index: 1; border-radius: 15px;"></div>
+                <img src="{% static 'images/blood donation.jpg' %}" alt="Blood Donation" class="img-fluid" style="border-radius: 15px; transform: scale(1.02); transition: all 0.5s ease;">
+            </div>
+        </div>
+
+        <!-- Right Side: Reasons with Icons -->
+        <div class="col-md-6">
+            <div class="reason">
+                <img src="{% static 'images/health.png' %}" class="icon" alt="Health Benefits">
+                <div>
+                    <h4>Health Benefits</h4>
+                    <p style="color: #333; line-height: 1.6;">Donating blood helps improve heart health, reduces harmful iron levels, and stimulates new blood cell production.</p>
+                </div>
+            </div>
+
+            <div class="reason">
+                <img src="{% static 'images/lives.png' %}" class="icon" alt="Save Lives">
+                <div>
+                    <h4>Save Lives</h4>
+                    <p style="color: #333; line-height: 1.6;">One donation can save up to three lives! Your blood can help accident victims, cancer patients, and those in need of surgeries.</p>
+                </div>
+            </div>
+
+            <div class="reason">
+                <img src="{% static 'images/comunity.png' %}" class="icon" alt="Community Support">
+                <div>
+                    <h4>Community Support</h4>
+                    <p style="color: #333; line-height: 1.6;">By donating blood, you contribute to your community and ensure hospitals have enough supply for those in need.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- About Team Section -->
+<div id="about-team" class="section-container" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
+    <h2 class="section-title text-center">About Our Team</h2>
+    
+    <!-- Small decorative particles -->
+    <div style="position: absolute; background-color: rgba(255,94,98,0.1); border-radius: 50%; width: 100px; height: 100px; top: 20%; left: 5%; z-index: 0;"></div>
+    <div style="position: absolute; background-color: rgba(255,153,102,0.1); border-radius: 50%; width: 150px; height: 150px; bottom: 10%; right: 5%; z-index: 0;"></div>
+    
+    <div class="row g-4">
+        <!-- Row 1: First two team members -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100" style="border-left: 4px solid #ff5e62; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center py-4">
+                        <div class="profile-image-wrapper" style="position: relative; display: inline-block;">
+                            <!-- Soft glow effect behind image -->
+                            <div style="position: absolute; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,94,98,0.2) 0%, rgba(255,94,98,0) 70%); border-radius: 50%; top: 0; left: 0; filter: blur(10px);"></div>
+                            <!-- Main image with enhanced styling -->
+                            <img src="{% static 'images/vvikash.jpg' %}" class="rounded-circle profile-pic" alt="Vikash Singh" style="width: 120px; height: 120px; object-fit: cover; box-shadow: 0 10px 30px rgba(255,94,98,0.2); border: 5px solid white; position: relative; z-index: 1; transition: all 0.3s ease;">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(to right, rgba(255,94,98,0.05), transparent); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <h3 class="card-title" style="color: #333; font-size: 1.5rem; margin-bottom: 10px;">Vikash Singh</h3>
+                                <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 0; display: inline-block; background-color: rgba(255,94,98,0.1); padding: 5px 15px; border-radius: 20px;"><i class="fas fa-user-tie mr-2" style="color: #ff5e62;"></i> Group Leader</p>
+                            </div>
+                            <p class="card-text" style="color: #555; line-height: 1.6;">AI enthusiast currently studying CSE-AI at Chitkara University. Passionate about real-world solutions and leadership.</p>
+                            <div style="margin-top: 15px;">
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff5e62; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,94,98,0.1);"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff5e62; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,94,98,0.1);"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100" style="border-left: 4px solid #ff7e42; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center py-4">
+                        <div class="profile-image-wrapper" style="position: relative; display: inline-block;">
+                            <!-- Soft glow effect behind image -->
+                            <div style="position: absolute; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,126,66,0.2) 0%, rgba(255,126,66,0) 70%); border-radius: 50%; top: 0; left: 0; filter: blur(10px);"></div>
+                            <!-- Main image with enhanced styling -->
+                            <img src="{% static 'images/vvvansh.jpg' %}" class="rounded-circle profile-pic" alt="Vansh Kaushik" style="width: 120px; height: 120px; object-fit: cover; box-shadow: 0 10px 30px rgba(255,126,66,0.2); border: 5px solid white; position: relative; z-index: 1; transition: all 0.3s ease;">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(to right, rgba(255,126,66,0.05), transparent); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <h3 class="card-title" style="color: #333; font-size: 1.5rem; margin-bottom: 10px;">Vansh Kaushik</h3>
+                                <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 0; display: inline-block; background-color: rgba(255,126,66,0.1); padding: 5px 15px; border-radius: 20px;"><i class="fas fa-user mr-2" style="color: #ff7e42;"></i> Team Member</p>
+                            </div>
+                            <p class="card-text" style="color: #555; line-height: 1.6;">Automobile lover with technical curiosity. Brings unique insights to our team from CSE-AI at Chitkara.</p>
+                            <div style="margin-top: 15px;">
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff7e42; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,126,66,0.1);"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff7e42; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,126,66,0.1);"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 2: Next two team members -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100" style="border-left: 4px solid #ff9966; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center py-4">
+                        <div class="profile-image-wrapper" style="position: relative; display: inline-block;">
+                            <!-- Soft glow effect behind image -->
+                            <div style="position: absolute; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,153,102,0.2) 0%, rgba(255,153,102,0) 70%); border-radius: 50%; top: 0; left: 0; filter: blur(10px);"></div>
+                            <!-- Main image with enhanced styling -->
+                            <img src="{% static 'images/pppratham.jpg' %}" class="rounded-circle profile-pic" alt="Pratham" style="width: 120px; height: 120px; object-fit: cover; box-shadow: 0 10px 30px rgba(255,153,102,0.2); border: 5px solid white; position: relative; z-index: 1; transition: all 0.3s ease;">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(to right, rgba(255,153,102,0.05), transparent); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <h3 class="card-title" style="color: #333; font-size: 1.5rem; margin-bottom: 10px;">Pratham Arora</h3>
+                                <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 0; display: inline-block; background-color: rgba(255,153,102,0.1); padding: 5px 15px; border-radius: 20px;"><i class="fas fa-user mr-2" style="color: #ff9966;"></i> Team Member</p>
+                            </div>
+                            <p class="card-text" style="color: #555; line-height: 1.6;">Keen learner and coder. Exploring tech and AI while pursuing CSE-AI at Chitkara University.</p>
+                            <div style="margin-top: 15px;">
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff9966; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,153,102,0.1);"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff9966; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,153,102,0.1);"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100" style="border-left: 4px solid #ff7e42; box-shadow: 0 15px 35px rgba(0,0,0,0.05);">
+                <div class="row g-0 h-100">
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center py-4">
+                        <div class="profile-image-wrapper" style="position: relative; display: inline-block;">
+                            <!-- Soft glow effect behind image -->
+                            <div style="position: absolute; width: 150px; height: 150px; background: radial-gradient(circle, rgba(255,126,66,0.2) 0%, rgba(255,126,66,0) 70%); border-radius: 50%; top: 0; left: 0; filter: blur(10px);"></div>
+                            <!-- Main image with enhanced styling -->
+                            <img src="{% static 'images/kkkairav.jpg' %}" class="rounded-circle profile-pic" alt="Kairav Vermani" style="width: 120px; height: 120px; object-fit: cover; box-shadow: 0 10px 30px rgba(255,126,66,0.2); border: 5px solid white; position: relative; z-index: 1; transition: all 0.3s ease;">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <div style="background: linear-gradient(to right, rgba(255,126,66,0.05), transparent); padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+                                <h3 class="card-title" style="color: #333; font-size: 1.5rem; margin-bottom: 10px;">Kairav Vermani</h3>
+                                <p class="text-muted" style="font-size: 0.9rem; margin-bottom: 0; display: inline-block; background-color: rgba(255,126,66,0.1); padding: 5px 15px; border-radius: 20px;"><i class="fas fa-user mr-2" style="color: #ff7e42;"></i> Team Member</p>
+                            </div>
+                            <p class="card-text" style="color: #555; line-height: 1.6;">NDA aspirant with strong discipline, also exploring CSE-AI to blend defense with innovation.</p>
+                            <div style="margin-top: 15px;">
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff7e42; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,126,66,0.1);"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="social-link" style="display: inline-block; margin-right: 10px; color: #ff7e42; width: 35px; height: 35px; line-height: 35px; text-align: center; border-radius: 50%; background-color: rgba(255,126,66,0.1);"><i class="fab fa-github"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Map Section -->
+<div id="hospital-map" class="section-container">
+    <h2 class="section-title text-center">Find Nearby Hospitals</h2>
+    
+    <div id="hospital-map" style="height: 500px; border-radius: 15px; overflow: hidden; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); position: relative;">
+        <!-- Decorative elements -->
+        <div style="position: absolute; top: 15px; left: 15px; z-index: 10; background-color: rgba(255,255,255,0.9); padding: 10px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+            <h5 style="margin: 0; color: #e62236; font-size: 1rem;"><i class="fas fa-map-marker-alt me-2"></i>Blood Banks in Punjab</h5>
+        </div>
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d1754704.5815370423!2d75.00064651245974!3d31.018305380352684!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sblood%20banks%20punjab!5e0!3m2!1sen!2sin!4v1682751799744!5m2!1sen!2sin"
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+</div>
+
+<!-- Contact Section -->
+<div id="contact-us" class="section-container">
+    <h2 class="section-title text-center">Contact Us</h2>
+    
+    <!-- Floating decorative elements -->
+    <div style="position: absolute; background-color: rgba(255,94,98,0.05); border-radius: 50%; width: 200px; height: 200px; top: 20%; left: -100px; z-index: 0;"></div>
+    <div style="position: absolute; background-color: rgba(255,153,102,0.05); border-radius: 50%; width: 250px; height: 250px; bottom: -100px; right: -50px; z-index: 0;"></div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card" style="padding: 30px; height: 100%;">
+                <div class="text-center mb-4">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(45deg, #ff5e62, #ff9966); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <i class="fas fa-envelope" style="font-size: 2rem; color: white;"></i>
+                    </div>
+                    <h3>Get In Touch</h3>
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">Have questions about donating blood? We're here to help!</p>
+                </div>
+                
+                <!-- Contact info container -->
+                <div class="contact-info-container">
+                    <!-- Phone info -->
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone-alt" style="color: white;"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h5>Phone</h5>
+                            <p>+91 98765 43210</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Email info -->
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope" style="color: white;"></i>
+                        </div>
+                        <div class="contact-text">
+                            <h5>Email</h5>
+                            <p>support@lifeflow.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Connect With Us section -->
+                <div class="social-section">
+                    <h4>Connect With Us</h4>
+                    <div>
+                        <a href="https://facebook.com" class="social-icon">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://twitter.com" class="social-icon">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com" class="social-icon">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card" style="padding: 30px;">
+                <h3>Send Us a Message</h3>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label" style="color: #333; font-weight: 500;">Name</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-user" style="position: absolute; left: 15px; top: 15px; color: #aaa;"></i>
+                            <input type="text" class="form-control" placeholder="Your Name" style="padding-left: 40px;">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label" style="color: #333; font-weight: 500;">Email</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-envelope" style="position: absolute; left: 15px; top: 15px; color: #aaa;"></i>
+                            <input type="email" class="form-control" placeholder="Your Email" style="padding-left: 40px;">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label" style="color: #333; font-weight: 500;">Message</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-comment-alt" style="position: absolute; left: 15px; top: 15px; color: #aaa;"></i>
+                            <textarea class="form-control" rows="4" placeholder="Your Message" style="padding-left: 40px;"></textarea>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-custom w-100">
+                        <i class="fas fa-paper-plane me-2"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

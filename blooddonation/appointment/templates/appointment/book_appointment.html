@@ -1,0 +1,333 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<br><br><br><br>
+<!-- Progress Bar -->
+<div class="progress-bar-container">
+    <div class="progress-bar" id="scrollProgress"></div>
+</div>
+
+<section class="appointment-section py-5">
+    <div class="container">
+        <!-- Floating Animation Cards -->
+        <div class="floating-cards">
+            <div class="card-float" data-aos="flip-left">
+                <i class="fas fa-calendar-check"></i>
+                <h4>Easy Booking</h4>
+            </div>
+            <div class="card-float" data-aos="flip-up">
+                <i class="fas fa-clock"></i>
+                <h4>24/7 Service</h4>
+            </div>
+            <div class="card-float" data-aos="flip-right">
+                <i class="fas fa-heart"></i>
+                <h4>Save Lives</h4>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <!-- Left: Image Carousel -->
+            <div class="col-md-6 mb-4">
+                <div class="image-carousel">
+                    <div class="carousel-container" id="imageCarousel">
+                        <div class="carousel-slide">
+                            <img src="{% static 'images/patient.png' %}" alt="Appointment 1">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{% static 'images/blood donation.jpg' %}" alt="Appointment 2">
+                        </div>
+                        <div class="carousel-slide">
+                            <img src="{% static 'images/background.jpg' %}" alt="Appointment 3">
+                        </div>
+                    </div>
+                    <button class="carousel-button prev">❮</button>
+                    <button class="carousel-button next">❯</button>
+                </div>
+            </div>
+
+            <!-- Right: Appointment Form -->
+            <div class="col-md-6" data-aos="fade-up">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h3 class="text-danger mb-4">Book Your Appointment</h3>
+                        <div class="step-indicator">
+                            <span class="step active" data-step="1"></span>
+                            <span class="step" data-step="2"></span>
+                            <span class="step" data-step="3"></span>
+                        </div>
+                    </div>
+
+                    <form method="POST" id="appointmentForm" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Step 1: Personal Info -->
+                        <div class="form-step" id="step1">
+                            <div class="form-floating mb-3">
+                                {{ form.full_name }}
+                                <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+                                <div class="invalid-feedback">Please enter your full name</div>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                {{ form.phone }}
+                                <label for="{{ form.phone.id_for_label }}">Phone</label>
+                                <div class="invalid-feedback">Please enter a valid phone number</div>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                {{ form.email }}
+                                <label for="{{ form.email.id_for_label }}">Email</label>
+                                <div class="invalid-feedback">Please enter a valid email</div>
+                            </div>
+                            <button type="button" class="btn btn-danger w-100" onclick="nextStep(2)">Next</button>
+                        </div>
+
+                        <!-- Step 2: Appointment Details -->
+                        <div class="form-step" id="step2" style="display: none;">
+                            <div class="form-floating mb-3">
+                                {{ form.date }}
+                                <label for="{{ form.date.id_for_label }}">Appointment Date</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                {{ form.time }}
+                                <label for="{{ form.time.id_for_label }}">Appointment Time</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                {{ form.type }}
+                                <label for="{{ form.type.id_for_label }}">Appointment Type</label>
+                            </div>
+                            <button type="button" class="btn btn-secondary me-2" onclick="previousStep(1)">Previous</button>
+                            <button type="button" class="btn btn-danger" onclick="nextStep(3)">Next</button>
+                        </div>
+
+                        <!-- Step 3: Additional Info -->
+                        <div class="form-step" id="step3" style="display: none;">
+                            <div class="form-floating mb-3">
+                                {{ form.message }}
+                                <label for="{{ form.message.id_for_label }}">Additional Notes</label>
+                            </div>
+                            <button type="button" class="btn btn-secondary me-2" onclick="previousStep(2)">Previous</button>
+                            <button type="submit" class="btn btn-success">Confirm Booking</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Progress Bar */
+.progress-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    z-index: 1000;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #ff4d4d, #ff0000);
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Floating Cards */
+.floating-cards {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 3rem;
+}
+
+.card-float {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.card-float:hover {
+    transform: translateY(-10px);
+}
+
+.card-float i {
+    font-size: 2rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+}
+
+.card-float h4 {
+    color: #dc3545 !important;  /* Bootstrap's danger red color */
+    font-weight: bold;
+}
+
+/* Image Carousel */
+.image-carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.carousel-container {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide {
+    min-width: 100%;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.7);
+    border: none;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-button:hover {
+    background: rgba(255,255,255,0.9);
+}
+
+.carousel-button.prev {
+    left: 10px;
+}
+
+.carousel-button.next {
+    right: 10px;
+}
+
+/* Form Styling */
+.form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.step-indicator {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.step {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ddd;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+}
+
+.step.active {
+    background: #dc3545;
+    transform: scale(1.2);
+}
+
+/* Animations */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.floating-cards .card-float {
+    animation: float 3s ease-in-out infinite;
+}
+</style>
+
+<script>
+// Progress Bar
+window.onscroll = function() {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("scrollProgress").style.width = scrolled + "%";
+};
+
+// Form Steps
+function nextStep(step) {
+    document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+    document.getElementById(`step${step}`).style.display = 'block';
+    updateStepIndicator(step);
+}
+
+function previousStep(step) {
+    document.querySelectorAll('.form-step').forEach(s => s.style.display = 'none');
+    document.getElementById(`step${step}`).style.display = 'block';
+    updateStepIndicator(step);
+}
+
+function updateStepIndicator(currentStep) {
+    document.querySelectorAll('.step').forEach((step, index) => {
+        step.classList.toggle('active', index < currentStep);
+    });
+}
+
+// Image Carousel
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const carousel = document.getElementById('imageCarousel');
+
+document.querySelector('.next').addEventListener('click', () => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateCarousel();
+});
+
+document.querySelector('.prev').addEventListener('click', () => {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    updateCarousel();
+});
+
+function updateCarousel() {
+    carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+}
+
+// Auto-advance carousel
+setInterval(() => {
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateCarousel();
+}, 5000);
+
+// Form Validation
+(function () {
+    'use strict'
+    const form = document.querySelector('#appointmentForm')
+    form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+        }
+        form.classList.add('was-validated')
+    }, false)
+})()
+</script>
+
+<!-- Initialize AOS -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script>
+    AOS.init({
+        duration: 1000,
+        once: true
+    });
+</script>
+{% endblock %}

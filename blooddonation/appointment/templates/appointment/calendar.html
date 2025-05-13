@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Calendar | LifeFlow</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <link href='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid/main.css' rel='stylesheet' />
+
+    <style>
+        .calendar-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #ffffff, #f3f3f3);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(220, 53, 69, 0.15);
+            padding: 25px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fc {
+            max-height: 650px;
+            font-size: 0.95em;
+        }
+
+        .fc-toolbar-title {
+            font-size: 2em !important;
+            background: linear-gradient(45deg, #dc3545, #fd7e14);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .fc-button-primary {
+            background: linear-gradient(45deg, #dc3545, #fd7e14) !important;
+            border: none !important;
+            padding: 10px 20px !important;
+            border-radius: 25px !important;
+            transition: all 0.3s ease !important;
+            transform: translateY(0);
+        }
+
+        .fc-button-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3) !important;
+        }
+
+        .fc-daygrid-day {
+            height: 100px !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .fc-daygrid-day:hover {
+            background: linear-gradient(145deg, rgba(220, 53, 69, 0.05), rgba(253, 126, 20, 0.05)) !important;
+            transform: scale(1.02);
+        }
+
+        .fc-event {
+            padding: 6px 10px !important;
+            margin: 3px 0 !important;
+            border-radius: 10px !important;
+            border: none !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .fc-event:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .fc-event .fc-content {
+            padding: 3px;
+        }
+
+        .fc-event .fc-title {
+            font-size: 1em;
+            margin-bottom: 3px;
+            font-weight: 500;
+        }
+
+        .fc-event .fc-description {
+            font-size: 0.85em;
+            opacity: 0.9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-pending { 
+            background: linear-gradient(45deg, #ffa600, #ff7c00) !important;
+            border-left: 4px solid #ff6b00 !important;
+        }
+        .status-success { 
+            background: linear-gradient(45deg, #28a745, #20c997) !important;
+            border-left: 4px solid #1e7e34 !important;
+        }
+        .status-cancelled { 
+            background: linear-gradient(45deg, #dc3545, #c82333) !important;
+            border-left: 4px solid #bd2130 !important;
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+            padding: 8px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .legend-item:hover {
+            background: linear-gradient(145deg, rgba(220, 53, 69, 0.1), rgba(253, 126, 20, 0.1));
+            transform: translateX(5px);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .legend-item:hover .legend-color {
+            transform: scale(1.2);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .fc-timegrid-event {
+            background: transparent !important;
+            border: none !important;
+            padding: 2px 4px !important;
+        }
+
+        .fc-timegrid-event .fc-event-main {
+            padding: 4px 6px;
+            border-radius: 6px;
+        }
+
+        .fc-timegrid-event .fc-event-title {
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .fc-timegrid-event .fc-type {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-top: 2px;
+        }
+
+        .fc-timegrid-slots td {
+            height: 40px !important;
+        }
+
+        .fc-timegrid-now-indicator-line {
+            border-color: #dc3545;
+        }
+
+        .fc-timegrid-now-indicator-arrow {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-4 mb-4">
+        <div class="calendar-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="text-danger mb-0">Upcoming Appointments</h4>
+                <a href="{% url 'home' %}" class="btn btn-outline-danger btn-sm">Back to Home</a>
+            </div>
+            <div id="calendar"></div>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #FFA500;"></div>
+                    <span>Pending</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #28a745;"></div>
+                    <span>Success</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #dc3545;"></div>
+                    <span>Cancelled</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/appointment/calendar/data/',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            views: {
+                timeGridWeek: {
+                    type: 'timeGrid',
+                    duration: { days: 7 },
+                    buttonText: 'Week',
+                    slotMinTime: '08:00:00',
+                    slotMaxTime: '20:00:00',
+                    slotDuration: '01:00:00',
+                },
+                timeGridDay: {
+                    type: 'timeGrid',
+                    duration: { days: 1 },
+                    buttonText: 'Day'
+                }
+            },
+            slotEventOverlap: false,
+            allDaySlot: false,
+            eventTimeFormat: {
+                hour: '2-digit',
+                minute: '2-digit',
+                meridiem: 'short'
+            },
+            eventDidMount: function(info) {
+                if (info.event.extendedProps.status) {
+                    info.el.classList.add('status-' + info.event.extendedProps.status);
+                }
+            },
+            eventContent: function(arg) {
+                const type = arg.event.extendedProps.type || '';
+                const time = arg.event.extendedProps.time || '';
+                const view = calendar.view.type;
+                
+                if (view === 'timeGridWeek' || view === 'timeGridDay') {
+                    return {
+                        html: `<div class="fc-content">
+                            <div class="fc-title"><b>${arg.event.title || ''}</b></div>
+                            ${type ? `<div class="fc-type"><small>${type}</small></div>` : ''}
+                        </div>`
+                    };
+                } else {
+                    return {
+                        html: `<div class="fc-content">
+                            <div class="fc-title"><b>${arg.event.title || ''}</b></div>
+                            ${type || time ? `
+                                <div class="fc-description">
+                                    ${type ? `<span class="badge bg-light text-dark">${type}</span>` : ''}
+                                    ${time ? `<span class="text-white"><i class="far fa-clock"></i> ${time}</span>` : ''}
+                                </div>
+                            ` : ''}
+                        </div>`
+                    };
+                }
+            },
+            height: 'auto',
+            contentHeight: 'auto',
+            aspectRatio: 1.8,
+            handleWindowResize: true,
+            dayMaxEvents: true,
+            nowIndicator: true,
+            scrollTime: '08:00:00'
+        });
+        calendar.render();
+    });
+    </script>
+</body>
+</html>

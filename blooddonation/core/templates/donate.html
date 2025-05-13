@@ -1,0 +1,318 @@
+<!-- \donate.html -->
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="donate-container" style="
+    padding: 120px 30px 40px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    position: relative;
+    overflow: hidden;
+    margin: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);">
+
+    <!-- Decorative elements similar to homepage -->
+    <div style="position: absolute; background-color: rgba(255,94,98,0.1); border-radius: 50%; width: 200px; height: 200px; top: 10%; left: -50px; z-index: 0;"></div>
+    <div style="position: absolute; background-color: rgba(255,153,102,0.1); border-radius: 50%; width: 300px; height: 300px; bottom: -100px; right: -50px; z-index: 0;"></div>
+    
+    <!-- Heading with gradient underline like home page -->
+    <div class="title-wrapper text-center" style="margin-bottom: 60px; position: relative; z-index: 1;">
+        <h2 class="section-title" style="
+            font-size: 2.5rem;
+            color: #000000;
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            text-transform: capitalize;
+            font-weight: 700;">
+            <span style="color: #000000ad;">Donate Blood, Save Lives</span>
+        </h2>
+        <!-- Gradient underline like home page -->
+        <div style="
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, #ff5e62, #ff9966);
+            border-radius: 3px;"></div>
+    </div>
+
+    <!-- Extra spacing div -->
+    <div style="height: 30px;"></div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card" style="
+                border: none;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                border-left: 4px solid #ff9966;
+                transition: all 0.3s ease;
+                margin-bottom: 30px;">
+                
+                <div class="card-header" style="
+                    background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+                    color: white;
+                    border: none;
+                    padding: 20px 25px;
+                    position: relative;
+                    overflow: hidden;">
+                    
+                    <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 60px; height: 60px; top: -20px; right: 10px;"></div>
+                    <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; bottom: 10px; right: 50px;"></div>
+                    
+                    <h3 class="mb-0" style="position: relative; z-index: 1; font-weight: 700;">Schedule Your Donation</h3>
+                </div>
+                
+                <div class="card-body" style="padding: 30px 25px;">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert" style="border-radius: 10px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label for="blood_group" class="form-label" style="font-weight: 600; color: #444; margin-bottom: 8px;">Blood Group</label>
+                                <select class="form-select" id="blood_group" name="blood_group" required style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; transition: all 0.3s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.03);">
+                                    <option value="">Select Blood Group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="amount_ml" class="form-label" style="font-weight: 600; color: #444; margin-bottom: 8px;">Amount (in ml)</label>
+                                <input type="number" class="form-control" id="amount_ml" name="amount_ml" 
+                                       min="200" max="500" value="450" required style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; transition: all 0.3s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.03);">
+                                <div class="form-text" style="color: #888; font-size: 0.85rem; margin-top: 5px;">Standard donation is 450ml</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3 mb-md-0">
+                                <label for="last_donation" class="form-label" style="font-weight: 600; color: #444; margin-bottom: 8px;">Last Donation Date</label>
+                                <input type="date" class="form-control" id="last_donation" name="last_donation" style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; transition: all 0.3s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.03);">
+                                <div class="form-text" style="color: #888; font-size: 0.85rem; margin-top: 5px;">Leave blank if first time donor</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="medical_conditions" class="form-label" style="font-weight: 600; color: #444; margin-bottom: 8px;">Medical Conditions</label>
+                                <textarea class="form-control" id="medical_conditions" name="medical_conditions" 
+                                          rows="2" placeholder="List any medical conditions" style="padding: 12px; border-radius: 10px; border: 1px solid #ddd; transition: all 0.3s ease; box-shadow: 0 3px 10px rgba(0,0,0,0.03);"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="consent" required style="width: 20px; height: 20px; margin-right: 8px; cursor: pointer;">
+                                <label class="form-check-label" for="consent" style="font-weight: 500; color: #444; cursor: pointer; padding-top: 2px;">
+                                    I confirm that I am in good health and eligible to donate blood
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn" style="
+                                background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+                                color: white;
+                                font-weight: 600;
+                                padding: 12px 25px;
+                                border-radius: 30px;
+                                border: none;
+                                box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+                                transition: all 0.3s ease;
+                                font-size: 1rem;">
+                                <i class="fas fa-heartbeat me-2"></i> Submit Donation
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Donation Guidelines Card -->
+            <div class="card" style="
+                border: none;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                border-left: 4px solid #ff9966;
+                transition: all 0.3s ease;">
+                
+                <div class="card-header" style="
+                    background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+                    color: white;
+                    border: none;
+                    padding: 20px 25px;
+                    position: relative;
+                    overflow: hidden;">
+                    
+                    <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 60px; height: 60px; top: -20px; right: 10px;"></div>
+                    <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; bottom: 10px; right: 50px;"></div>
+                    
+                    <h4 class="mb-0" style="position: relative; z-index: 1; font-weight: 700;">Donation Guidelines</h4>
+                </div>
+                
+                <div class="card-body" style="padding: 25px;">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" style="background-color: transparent; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px 5px; display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; min-width: 30px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span style="font-weight: 500; color: #444;">Must be at least 18 years old</span>
+                        </li>
+                        <li class="list-group-item" style="background-color: transparent; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px 5px; display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; min-width: 30px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span style="font-weight: 500; color: #444;">Weight should be above 50kg</span>
+                        </li>
+                        <li class="list-group-item" style="background-color: transparent; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px 5px; display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; min-width: 30px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span style="font-weight: 500; color: #444;">Must wait 56 days between donations</span>
+                        </li>
+                        <li class="list-group-item" style="background-color: transparent; border-bottom: 1px solid rgba(0,0,0,0.05); padding: 15px 5px; display: flex; align-items: center;">
+                            <div style="width: 30px; height: 30px; min-width: 30px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span style="font-weight: 500; color: #444;">Should not have any active infections</span>
+                        </li>
+                        <li class="list-group-item" style="background-color: transparent; padding: 15px 5px; display: flex; align-items: center; border-bottom: none;">
+                            <div style="width: 30px; height: 30px; min-width: 30px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <span style="font-weight: 500; color: #444;">Hemoglobin level must be adequate</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Benefits of Donating Blood -->
+            <div class="card mt-4" style="
+                border: none;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                border-left: 4px solid #ff7e42;
+                transition: all 0.3s ease;
+                margin-top: 30px;">
+                
+                <div class="card-header" style="
+                    background: linear-gradient(135deg, #ff7e42, #ff9966 100%);
+                    color: white;
+                    border: none;
+                    padding: 20px 25px;
+                    position: relative;
+                    overflow: hidden;">
+                    
+                    <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 60px; height: 60px; top: -20px; right: 10px;"></div>
+                    <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; bottom: 10px; right: 50px;"></div>
+                    
+                    <h4 class="mb-0" style="position: relative; z-index: 1; font-weight: 700;">Benefits of Donating Blood</h4>
+                </div>
+                
+                <div class="card-body" style="padding: 25px;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 40px; height: 40px; min-width: 40px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div>
+                                    <h5 style="margin: 0 0 5px; font-weight: 600; color: #333; font-size: 1.1rem;">Heart Health</h5>
+                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Reduces risk of heart attacks and strokes</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 40px; height: 40px; min-width: 40px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div>
+                                    <h5 style="margin: 0 0 5px; font-weight: 600; color: #333; font-size: 1.1rem;">Burns Calories</h5>
+                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Donating blood burns approximately 650 calories</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 40px; height: 40px; min-width: 40px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                    <i class="fas fa-microscope"></i>
+                                </div>
+                                <div>
+                                    <h5 style="margin: 0 0 5px; font-weight: 600; color: #333; font-size: 1.1rem;">Free Health Check</h5>
+                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Get mini health screening with each donation</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div style="display: flex; align-items: flex-start;">
+                                <div style="width: 40px; height: 40px; min-width: 40px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 3px 10px rgba(255, 94, 98, 0.2);">
+                                    <i class="fas fa-user-friends"></i>
+                                </div>
+                                <div>
+                                    <h5 style="margin: 0 0 5px; font-weight: 600; color: #333; font-size: 1.1rem;">Save Lives</h5>
+                                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Your donation can save up to 3 lives</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+
+// Date validation
+document.getElementById('last_donation').max = new Date().toISOString().split("T")[0];
+
+// Form field enhancement
+const formFields = document.querySelectorAll('.form-control, .form-select');
+formFields.forEach(field => {
+    field.addEventListener('focus', function() {
+        this.style.boxShadow = '0 0 0 3px rgba(255, 94, 98, 0.2)';
+        this.style.borderColor = '#ff5e62';
+    });
+    
+    field.addEventListener('blur', function() {
+        this.style.boxShadow = '0 3px 10px rgba(0,0,0,0.03)';
+        this.style.borderColor = '#ddd';
+    });
+});
+
+</script>
+{% endblock %}

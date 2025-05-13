@@ -1,0 +1,525 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .page-header {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .page-header::before {
+        content: '';
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        top: -100px;
+        right: -50px;
+        border-radius: 50%;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+        background: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .form-control, .form-select {
+        border-radius: 10px;
+        padding: 0.6rem 1rem;
+        border: 1px solid #e1e5eb;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        box-shadow: 0 0 0 4px rgba(255, 94, 98, 0.1);
+        border-color: #ff5e62;
+    }
+    
+    .form-floating > .form-control:focus,
+    .form-floating > .form-control:not(:placeholder-shown) {
+        padding-top: 1.625rem;
+        padding-bottom: 0.625rem;
+    }
+    
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        opacity: .65;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+    }
+    
+    .btn-gradient {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        border: none;
+        color: white;
+        border-radius: 50px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(255, 94, 98, 0.3);
+        transition: all 0.3s;
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 94, 98, 0.4);
+    }
+    
+    .blood-type-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .blood-type-option {
+        flex: 1;
+        min-width: 60px;
+    }
+    
+    .blood-type-option input[type="radio"] {
+        display: none;
+    }
+    
+    .blood-type-option label {
+        display: block;
+        text-align: center;
+        padding: 15px 5px;
+        border-radius: 10px;
+        border: 2px solid #e1e5eb;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-weight: 600;
+    }
+    
+    .blood-type-option input[type="radio"]:checked + label {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 5px 15px rgba(255, 94, 98, 0.3);
+    }
+    
+    .blood-type-option:hover label {
+        border-color: #ff5e62;
+    }
+    
+    .urgency-selector {
+        margin-bottom: 20px;
+    }
+    
+    .urgency-option {
+        position: relative;
+        margin-bottom: 10px;
+    }
+    
+    .urgency-option input[type="radio"] {
+        display: none;
+    }
+    
+    .urgency-option label {
+        display: block;
+        padding: 15px;
+        border-radius: 10px;
+        border: 2px solid #e1e5eb;
+        cursor: pointer;
+        transition: all 0.3s;
+        padding-left: 50px;
+    }
+    
+    .urgency-critical label {
+        border-color: rgba(220, 53, 69, 0.3);
+    }
+    
+    .urgency-high label {
+        border-color: rgba(255, 193, 7, 0.3);
+    }
+    
+    .urgency-medium label {
+        border-color: rgba(13, 202, 240, 0.3);
+    }
+    
+    .urgency-low label {
+        border-color: rgba(25, 135, 84, 0.3);
+    }
+    
+    .urgency-option input[type="radio"]:checked + label {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .urgency-critical input[type="radio"]:checked + label {
+        background-color: rgba(220, 53, 69, 0.1);
+        border-color: #dc3545;
+    }
+    
+    .urgency-high input[type="radio"]:checked + label {
+        background-color: rgba(255, 193, 7, 0.1);
+        border-color: #ffc107;
+    }
+    
+    .urgency-medium input[type="radio"]:checked + label {
+        background-color: rgba(13, 202, 240, 0.1);
+        border-color: #0dcaf0;
+    }
+    
+    .urgency-low input[type="radio"]:checked + label {
+        background-color: rgba(25, 135, 84, 0.1);
+        border-color: #198754;
+    }
+    
+    .urgency-option label::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+        transition: all 0.3s;
+    }
+    
+    .urgency-option input[type="radio"]:checked + label::before {
+        content: '';
+        background-color: white;
+        border-width: 6px;
+    }
+    
+    .urgency-critical input[type="radio"]:checked + label::before {
+        border-color: #dc3545;
+    }
+    
+    .urgency-high input[type="radio"]:checked + label::before {
+        border-color: #ffc107;
+    }
+    
+    .urgency-medium input[type="radio"]:checked + label::before {
+        border-color: #0dcaf0;
+    }
+    
+    .urgency-low input[type="radio"]:checked + label::before {
+        border-color: #198754;
+    }
+    
+    .urgency-critical:hover label {
+        background-color: rgba(220, 53, 69, 0.05);
+    }
+    
+    .urgency-high:hover label {
+        background-color: rgba(255, 193, 7, 0.05);
+    }
+    
+    .urgency-medium:hover label {
+        background-color: rgba(13, 202, 240, 0.05);
+    }
+    
+    .urgency-low:hover label {
+        background-color: rgba(25, 135, 84, 0.05);
+    }
+    
+    .input-icon-wrapper {
+        position: relative;
+    }
+    
+    .input-icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 15px;
+        color: #6c757d;
+    }
+    
+    .input-with-icon {
+        padding-left: 45px;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+    
+    .text-highlight {
+        color: #ff5e62;
+        font-weight: 600;
+    }
+    
+    .form-floating label {
+        padding-left: 1rem;
+    }
+</style>
+
+<div class="container mt-5 pt-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    {% if message.tags == 'success' %}
+                        <i class="fas fa-check-circle me-2"></i>
+                    {% elif message.tags == 'error' %}
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Page Header -->
+    <div class="page-header d-flex align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-2"><i class="fas fa-hand-holding-medical me-3"></i>Request Blood</h2>
+            <p class="mb-0 opacity-75">Fill in the form below to submit your blood request</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column - Info -->
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-info-circle me-2" style="color: #ff5e62;"></i>
+                    <h5 class="mb-0">Request Guidelines</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <h6 class="text-highlight mb-2">Urgency Levels</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-danger me-2">Critical</span>
+                            <span class="small">Immediate need (within hours)</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-warning text-dark me-2">High</span>
+                            <span class="small">Urgent need (within 24 hours)</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-info text-dark me-2">Medium</span>
+                            <span class="small">Needed within 3 days</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-success me-2">Low</span>
+                            <span class="small">Needed within a week</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6 class="text-highlight mb-2">Important Notes</h6>
+                        <ul class="small ps-3">
+                            <li class="mb-2">Please provide accurate contact information</li>
+                            <li class="mb-2">Critical requests are prioritized immediately</li>
+                            <li class="mb-2">Verification calls may be made to confirm details</li>
+                            <li class="mb-2">You will receive notifications on status updates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-light p-3 rounded mb-3">
+                        <h6 class="text-highlight mb-2"><i class="fas fa-phone-alt me-2"></i>Emergency Contact</h6>
+                        <p class="small mb-1">For immediate assistance:</p>
+                        <p class="fw-bold mb-0">+1 (800) 123-4567</p>
+                    </div>
+                </div>
+            </div>
+            
+            {% if user_requests %}
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-history me-2" style="color: #ff5e62;"></i>
+                    <h5 class="mb-0">Recent Requests</h5>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        {% for request in user_requests %}
+                        <li class="list-group-item border-0 py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-tint me-1" style="color: #ff5e62;"></i> {{ request.blood_group }}
+                                    </span>
+                                    <small class="text-muted ms-2">{{ request.created_at|date:"M d, Y" }}</small>
+                                </div>
+                                <span class="badge {% if request.status == 'pending' %}bg-warning text-dark
+                                    {% elif request.status == 'approved' %}bg-success
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ request.status|title }}
+                                </span>
+                            </div>
+                            <div class="small mt-1">{{ request.hospital_name }}</div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Right Column - Request Form -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-file-medical me-2" style="color: #ff5e62;"></i>
+                    <h5 class="mb-0">Blood Request Form</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        <!-- Blood Group Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">Blood Group <span class="text-danger">*</span></label>
+                            <div class="blood-type-selector">
+                                {% for choice in form.blood_group.field.choices %}
+                                <div class="blood-type-option">
+                                    <input type="radio" name="blood_group" id="blood_{{ choice.0 }}" value="{{ choice.0 }}" required 
+                                           {% if form.blood_group.value == choice.0 %}checked{% endif %}>
+                                    <label for="blood_{{ choice.0 }}">{{ choice.1 }}</label>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <!-- Urgency Selection -->
+                        <div class="mb-4">
+                            <label class="form-label">Urgency Level <span class="text-danger">*</span></label>
+                            <div class="urgency-selector">
+                                <div class="urgency-option urgency-critical">
+                                    <input type="radio" name="urgency" id="urgency_critical" value="critical" required
+                                           {% if form.urgency.value == 'critical' %}checked{% endif %}>
+                                    <label for="urgency_critical">
+                                        <strong class="text-danger">Critical</strong> - Immediate need (within hours)
+                                    </label>
+                                </div>
+                                <div class="urgency-option urgency-high">
+                                    <input type="radio" name="urgency" id="urgency_high" value="high" required
+                                           {% if form.urgency.value == 'high' %}checked{% endif %}>
+                                    <label for="urgency_high">
+                                        <strong class="text-warning">High</strong> - Urgent need (within 24 hours)
+                                    </label>
+                                </div>
+                                <div class="urgency-option urgency-medium">
+                                    <input type="radio" name="urgency" id="urgency_medium" value="medium" required
+                                           {% if form.urgency.value == 'medium' %}checked{% endif %}>
+                                    <label for="urgency_medium">
+                                        <strong class="text-info">Medium</strong> - Needed within 3 days
+                                    </label>
+                                </div>
+                                <div class="urgency-option urgency-low">
+                                    <input type="radio" name="urgency" id="urgency_low" value="low" required
+                                           {% if form.urgency.value == 'low' %}checked{% endif %}>
+                                    <label for="urgency_low">
+                                        <strong class="text-success">Low</strong> - Needed within a week
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Hospital Information -->
+                        <div class="mb-4">
+                            <label class="form-label">Hospital Information <span class="text-danger">*</span></label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-hospital input-icon"></i>
+                                        <input type="text" class="form-control input-with-icon" id="hospital_name" 
+                                               name="hospital_name" placeholder="Hospital Name" 
+                                               value="{{ form.hospital_name.value|default:'' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-map-marker-alt input-icon"></i>
+                                        <input type="text" class="form-control input-with-icon" id="hospital_address" 
+                                               name="hospital_address" placeholder="Hospital Address" 
+                                               value="{{ form.hospital_address.value|default:'' }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Contact Information -->
+                        <div class="mb-4">
+                            <label class="form-label">Contact Information <span class="text-danger">*</span></label>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-user input-icon"></i>
+                                        <input type="text" class="form-control input-with-icon" id="contact_name" 
+                                               name="contact_name" placeholder="Contact Person Name" 
+                                               value="{{ form.contact_name.value|default:'' }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-icon-wrapper">
+                                        <i class="fas fa-phone-alt input-icon"></i>
+                                        <input type="tel" class="form-control input-with-icon" id="contact_number" 
+                                               name="contact_number" placeholder="Contact Number" 
+                                               value="{{ form.contact_number.value|default:'' }}" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Notes -->
+                        <div class="mb-4">
+                            <label for="additional_notes" class="form-label">Additional Notes</label>
+                            <textarea class="form-control" id="additional_notes" name="additional_notes" 
+                                      rows="3" placeholder="Any additional information...">{{ form.additional_notes.value|default:'' }}</textarea>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-gradient px-5">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Form validation
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.needs-validation');
+        
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            
+            form.classList.add('was-validated');
+        });
+    });
+</script>
+{% endblock %}

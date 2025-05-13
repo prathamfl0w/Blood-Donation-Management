@@ -1,0 +1,369 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="admin-requests-container" style="padding: 120px 30px 40px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); position: relative; overflow: hidden; margin: 20px 30px; border-radius: 15px; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);">
+    
+    <!-- Decorative elements -->
+    <div style="position: absolute; background-color: rgba(255,94,98,0.1); border-radius: 50%; width: 200px; height: 200px; top: 10%; left: -50px; z-index: 0;"></div>
+    <div style="position: absolute; background-color: rgba(255,153,102,0.1); border-radius: 50%; width: 300px; height: 300px; bottom: -100px; right: -50px; z-index: 0;"></div>
+    
+    <!-- Heading with gradient underline -->
+    <div class="title-wrapper text-center" style="margin-bottom: 40px; position: relative; z-index: 1;">
+        <h2 class="section-title" style="font-size: 2.5rem; color: #000000; position: relative; display: inline-block; margin-bottom: 1.5rem; padding-bottom: 0.8rem; text-transform: capitalize; font-weight: 700;">
+            <span style="color: #000000ad;">Manage Blood Requests</span>
+        </h2>
+        <!-- Gradient underline -->
+        <div style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: linear-gradient(to right, #ff5e62, #ff9966); border-radius: 3px;"></div>
+    </div>
+
+    <!-- Stats Cards Row -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card" style="border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border-left: 4px solid #ff5e62; margin-bottom: 20px;">
+                <div class="card-body d-flex align-items-center" style="padding: 1.5rem;">
+                    <div style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 5px 15px rgba(255, 94, 98, 0.2);">
+                        <i class="fas fa-clipboard-list fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 style="margin: 0 0 5px; font-weight: 600; color: #666; font-size: 0.9rem;">Total Requests</h6>
+                        <h3 style="margin: 0; font-weight: 700; color: #333;">{{ total_requests }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border-left: 4px solid #ffc107; margin-bottom: 20px;">
+                <div class="card-body d-flex align-items-center" style="padding: 1.5rem;">
+                    <div style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(45deg, #ffc107, #ffdb7e); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 5px 15px rgba(255, 193, 7, 0.2);">
+                        <i class="fas fa-hourglass-half fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 style="margin: 0 0 5px; font-weight: 600; color: #666; font-size: 0.9rem;">Pending Requests</h6>
+                        <h3 style="margin: 0; font-weight: 700; color: #333;">{{ pending_requests }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border-left: 4px solid #dc3545; margin-bottom: 20px;">
+                <div class="card-body d-flex align-items-center" style="padding: 1.5rem;">
+                    <div style="width: 50px; height: 50px; min-width: 50px; background: linear-gradient(45deg, #dc3545, #f27685); color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; box-shadow: 0 5px 15px rgba(220, 53, 69, 0.2);">
+                        <i class="fas fa-exclamation-circle fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 style="margin: 0 0 5px; font-weight: 600; color: #666; font-size: 0.9rem;">Urgent Requests</h6>
+                        <h3 style="margin: 0; font-weight: 700; color: #333;">{{ urgent_requests }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters and Actions Row -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="d-flex">
+                <select id="urgencyFilter" class="form-select me-2" style="width: auto; border-radius: 10px; padding: 0.5rem 1rem; border: 1px solid #e1e5eb; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 3px 10px rgba(0,0,0,0.03); padding-right: 2.5rem;">
+                    <option value="all">All Urgency</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                </select>
+                <select id="statusFilter" class="form-select" style="width: auto; border-radius: 10px; padding: 0.5rem 1rem; border: 1px solid #e1e5eb; font-size: 0.95rem; transition: all 0.3s; box-shadow: 0 3px 10px rgba(0,0,0,0.03); padding-right: 2.5rem;">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="input-group" style="border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.03);">
+                <input type="text" id="searchInput" class="form-control" placeholder="Search requesters..." style="border-radius: 10px 0 0 10px; border: 1px solid #e1e5eb; padding: 0.5rem 1rem; font-size: 0.95rem;">
+                <button class="btn" style="background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 0 10px 10px 0; border: none;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Requests Table Card -->
+    <div class="card" style="border: none; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); border-left: 4px solid #ff9966; margin-bottom: 30px;">
+        <div class="card-header" style="background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%); color: white; border: none; padding: 20px 25px; position: relative; overflow: hidden;">
+            <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 60px; height: 60px; top: -20px; right: 10px;"></div>
+            <div style="position: absolute; background-color: rgba(255,255,255,0.1); border-radius: 50%; width: 40px; height: 40px; bottom: 10px; right: 50px;"></div>
+            <h4 class="mb-0" style="position: relative; z-index: 1; font-weight: 700;">Blood Request Records</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" style="border-collapse: separate; border-spacing: 0 0.5rem; margin-bottom: 0;">
+                    <thead>
+                        <tr>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem;">Requester</th>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem;">Blood Group</th>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem;">Hospital</th>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem;">Urgency</th>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem;">Status</th>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem;">Date</th>
+                            <th style="background: transparent; border: none; color: #495057; font-weight: 600; padding: 0.5rem 1rem; font-size: 0.9rem; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requests %}
+                        <tr style="box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); border-radius: 10px;" class="{% if request.urgency == 'critical' %}priority-critical{% elif request.urgency == 'high' %}priority-high{% endif %}">
+                            <td style="background: white; border: none; padding: 1rem; border-top-left-radius: 10px; border-bottom-left-radius: 10px; vertical-align: middle;">
+                                <div class="d-flex align-items-center">
+                                    <div style="width: 35px; height: 35px; background: linear-gradient(45deg, #ff5e62, #ff9966); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    {{ request.contact_name }}
+                                </div>
+                            </td>
+                            <td style="background: white; border: none; padding: 1rem; vertical-align: middle;">
+                                <span style="background-color: rgba(220, 53, 69, 0.15); color: #dc3545; padding: 0.4em 0.8em; border-radius: 30px; font-size: 0.8rem; font-weight: 600;">
+                                    {{ request.blood_group }}
+                                </span>
+                            </td>
+                            <td style="background: white; border: none; padding: 1rem; vertical-align: middle;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fas fa-hospital me-2" style="color: #6c757d;"></i>
+                                    {{ request.hospital_name }}
+                                </div>
+                            </td>
+                            <td style="background: white; border: none; padding: 1rem; vertical-align: middle;">
+                                <span 
+                                    class="urgency-badge {% if request.urgency == 'critical' %}urgency-critical{% elif request.urgency == 'high' %}urgency-high{% elif request.urgency == 'medium' %}urgency-medium{% else %}urgency-low{% endif %}"
+                                    style="padding: 0.5em 1em; font-size: 0.8rem; border-radius: 30px; font-weight: 600;">
+                                    {{ request.urgency|title }}
+                                </span>
+                            </td>
+                            <td style="background: white; border: none; padding: 1rem; vertical-align: middle;">
+                                <span 
+                                    class="status-badge {% if request.status == 'pending' %}status-pending{% elif request.status == 'approved' %}status-approved{% else %}status-rejected{% endif %}"
+                                    style="padding: 0.5em 1em; font-size: 0.8rem; border-radius: 30px; font-weight: 600;">
+                                    {{ request.status|title }}
+                                </span>
+                            </td>
+                            <td style="background: white; border: none; padding: 1rem; vertical-align: middle;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="far fa-calendar-alt me-2" style="color: #6c757d;"></i>
+                                    {{ request.created_at|date:"M d, Y" }}
+                                </div>
+                            </td>
+                            <td style="background: white; border: none; padding: 1rem; border-top-right-radius: 10px; border-bottom-right-radius: 10px; text-align: center; vertical-align: middle;">
+                                <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal{{ request.id }}" style="background-color: rgba(13, 110, 253, 0.15); color: #0d6efd; border-radius: 8px; margin: 0 2px; border: none; width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm" onclick="updateRequestStatus('{{ request.id }}', 'approved')" style="background-color: rgba(25, 135, 84, 0.15); color: #198754; border-radius: 8px; margin: 0 2px; border: none; width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button class="btn btn-sm" onclick="updateRequestStatus('{{ request.id }}', 'rejected')" style="background-color: rgba(220, 53, 69, 0.15); color: #dc3545; border-radius: 8px; margin: 0 2px; border: none; width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" style="background: white; border: none; padding: 2rem; border-radius: 10px; text-align: center;">
+                                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <i class="fas fa-clipboard-list fa-4x mb-3" style="color: #e9ecef;"></i>
+                                    <h5 style="font-weight: 500; color: #adb5bd; margin-bottom: 1rem;">No blood requests found</h5>
+                                    <p style="color: #6c757d; max-width: 400px; margin: 0 auto 1.5rem;">There are no blood requests recorded in the system yet.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .table tr:hover {
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    #urgencyFilter:focus, #statusFilter:focus, #searchInput:focus {
+        box-shadow: 0 0 0 3px rgba(255, 94, 98, 0.2);
+        border-color: #ff5e62;
+        outline: none;
+    }
+    
+    .priority-critical td {
+        border-left: 3px solid #dc3545 !important;
+    }
+    
+    .priority-high td {
+        border-left: 3px solid #ffc107 !important;
+    }
+    
+    .urgency-badge.urgency-critical {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: #dc3545;
+    }
+    
+    .urgency-badge.urgency-high {
+        background-color: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+    }
+    
+    .urgency-badge.urgency-medium {
+        background-color: rgba(13, 202, 240, 0.15);
+        color: #0dcaf0;
+    }
+    
+    .urgency-badge.urgency-low {
+        background-color: rgba(25, 135, 84, 0.15);
+        color: #198754;
+    }
+    
+    .status-badge.status-pending {
+        background-color: rgba(255, 193, 7, 0.15);
+        color: #ffc107;
+    }
+    
+    .status-badge.status-approved {
+        background-color: rgba(25, 135, 84, 0.15);
+        color: #198754;
+    }
+    
+    .status-badge.status-rejected {
+        background-color: rgba(220, 53, 69, 0.15);
+        color: #dc3545;
+    }
+</style>
+
+<script>
+function updateRequestStatus(requestId, status) {
+    if (confirm('Are you sure you want to ' + status + ' this request?')) {
+        fetch(`/update-request-status/${requestId}/${status}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error updating status');
+            }
+        });
+    }
+}
+
+// Add filters
+document.addEventListener('DOMContentLoaded', function() {
+    const urgencyFilter = document.getElementById('urgencyFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const searchInput = document.getElementById('searchInput');
+    
+    function applyFilters() {
+        const urgency = urgencyFilter.value;
+        const status = statusFilter.value;
+        const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+        
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const urgencyCell = row.querySelector('td:nth-child(4)');
+            const statusCell = row.querySelector('td:nth-child(5)');
+            const requesterCell = row.querySelector('td:nth-child(1)');
+            const hospitalCell = row.querySelector('td:nth-child(3)');
+            
+            if (!urgencyCell || !statusCell) return;
+            
+            const urgencyMatch = urgency === 'all' || urgencyCell.textContent.trim().toLowerCase().includes(urgency);
+            const statusMatch = status === 'all' || statusCell.textContent.trim().toLowerCase().includes(status);
+            const searchMatch = !searchTerm || 
+                              (requesterCell && requesterCell.textContent.trim().toLowerCase().includes(searchTerm)) || 
+                              (hospitalCell && hospitalCell.textContent.trim().toLowerCase().includes(searchTerm));
+            
+            if (urgencyMatch && statusMatch && searchMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+    
+    if (urgencyFilter) urgencyFilter.addEventListener('change', applyFilters);
+    if (statusFilter) statusFilter.addEventListener('change', applyFilters);
+    if (searchInput) searchInput.addEventListener('keyup', applyFilters);
+});
+
+// Toast notifications
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.innerHTML = `
+        <div class="toast-content ${type}">
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }, 100);
+}
+</script>
+
+<style>
+    .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1050;
+        transform: translateY(100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .toast-notification.show {
+        transform: translateY(0);
+    }
+    
+    .toast-content {
+        display: flex;
+        align-items: center;
+        padding: 15px 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        min-width: 280px;
+    }
+    
+    .toast-content.success {
+        border-left: 4px solid #198754;
+    }
+    
+    .toast-content.error {
+        border-left: 4px solid #dc3545;
+    }
+    
+    .toast-content i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .toast-content.success i {
+        color: #198754;
+    }
+    
+    .toast-content.error i {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}

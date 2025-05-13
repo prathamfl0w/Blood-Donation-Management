@@ -1,0 +1,480 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeFlow - Blood Donation</title>
+
+    <!-- Bootstrap, jQuery, Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="{% static 'style.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            scroll-behavior: smooth;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f8f9fa 100%);
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        /* Beautiful decorative shapes in background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 94, 98, 0.03) 0%, transparent 60%),
+                radial-gradient(circle at 90% 50%, rgba(255, 153, 102, 0.03) 0%, transparent 70%),
+                radial-gradient(circle at 50% 80%, rgba(220, 53, 69, 0.03) 0%, transparent 60%);
+            z-index: -1;
+        }
+        
+        /* Subtle animated blood cells */
+        .blood-cell {
+            position: fixed;
+            background-color: rgba(220, 53, 69, 0.1);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .blood-cell:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            left: -150px;
+            top: 10%;
+            animation-delay: 0s;
+        }
+        
+        .blood-cell:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            right: -100px;
+            top: 30%;
+            animation-delay: 3s;
+        }
+        
+        .blood-cell:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            left: 20%;
+            bottom: -125px;
+            animation-delay: 7s;
+        }
+        
+        .blood-cell:nth-child(4) {
+            width: 180px;
+            height: 180px;
+            right: 20%;
+            bottom: 10%;
+            animation-delay: 5s;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); }
+            25% { transform: translateY(-20px) translateX(10px) rotate(5deg); }
+            50% { transform: translateY(0) translateX(20px) rotate(0deg); }
+            75% { transform: translateY(20px) translateX(10px) rotate(-5deg); }
+            100% { transform: translateY(0) translateX(0) rotate(0deg); }
+        }
+        
+        .navbar {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 1.2rem 0;
+            transition: all 0.3s ease;
+            width: 100%;
+            background: linear-gradient(135deg, rgba(255, 94, 98, 0.95) 0%, rgba(255, 153, 102, 0.95) 100%);
+            position: relative;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Shimmering line effect under navbar */
+        .navbar::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%,
+                rgba(255,255,255,0.8) 50%,
+                rgba(255,255,255,0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 4s infinite linear;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Add subtle patterns to navbar */
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 15%),
+                radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 20%);
+            z-index: -1;
+        }
+        
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            margin-right: 12px;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        /* .navbar-brand:hover .logo {
+            /* box-shadow: 0 5px 15px rgba(255, 255, 255, 0.4); <- Removed this line */
+            /* No hover effect on the logo now */
+        
+         */
+        .brand-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            margin: 0;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.15);
+            position: relative;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+        
+        .brand-text::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        .navbar-brand:hover .brand-text::after {
+            width: 100%;
+        }
+        
+        .navbar .container-fluid {
+            padding: 0 20px;
+        }
+        .navbar-nav {
+            padding-right: 15px;
+        }
+        .navbar-nav .nav-item {
+            position: relative;
+            margin: 0 5px;
+        }
+        .navbar-nav .nav-link:not(.donate-btn) {
+            color: white !important;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 0.8rem 1.2rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin: 0 3px;
+        }
+        .navbar-nav .nav-link:not(.donate-btn):hover {
+            color: white !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        }
+        .navbar-nav .nav-link:not(.donate-btn)::before {
+            content: '';
+            position: absolute;
+            width: 40%;
+            height: 2px;
+            bottom: 7px;
+            left: 30%;
+            background-color: white;
+            transform: scaleX(0);
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+        .navbar-nav .nav-link:not(.donate-btn):hover::before {
+            transform: scaleX(1);
+        }
+        .navbar-nav .nav-link:not(.donate-btn) i {
+            transition: all 0.3s ease;
+            margin-right: 5px;
+        }
+        .navbar-nav .nav-link:not(.donate-btn):hover i {
+            transform: scale(1.2) translateY(-2px);
+            color: rgba(255, 255, 255, 1);
+        }
+        .donate-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white !important;
+            font-weight: 700;
+            padding: 0.8rem 1.4rem !important;
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(5px);
+            margin-left: 10px;
+            font-size: 1.05rem;
+        }
+        .donate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: -1;
+            transition: all 0.5s ease;
+            transform: scaleX(0);
+            transform-origin: right;
+        }
+        .donate-btn:hover::before {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+        .donate-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            color: #ff5e62 !important;
+        }
+        .donate-btn i {
+            color: white;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+        .donate-btn:hover i {
+            color: #ff5e62;
+            animation: heartbeat 1s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.2); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .auth-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: white !important;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            margin-left: 8px;
+            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
+            font-weight: 600;
+            padding: 0.6rem 1rem !important;
+        }
+        .auth-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-right: 15px;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        .navbar-toggler::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%);
+            transform: scale(0);
+            opacity: 0;
+            transition: all 0.4s ease;
+        }
+        .navbar-toggler:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .navbar-toggler:hover::after {
+            transform: scale(2);
+            opacity: 1;
+        }
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: none;
+        }
+        .navbar-toggler i {
+            transition: all 0.3s ease;
+        }
+        .navbar-toggler:hover i {
+            transform: rotate(90deg);
+        }
+        
+        /* Content styling */
+        .content-wrapper {
+            padding-top: 90px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Card styling */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Section styling */
+        section {
+            padding: 50px 0;
+            position: relative;
+        }
+        
+        section h2 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        section h2::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, #ff5e62, #ff9966);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        /* Container styling */
+        .container, .container-fluid {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div id="preloader"></div>
+    
+    <!-- Decorative blood cells -->
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+    <div class="blood-cell"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/newlogo.jpg' %}" class="logo" alt="LifeFlow Logo">
+                <span class="brand-text">LifeFlow</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <i class="fas fa-bars" style="color: white;"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#about-team"><i class="fas fa-info-circle me-1"></i> About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#hospital-map"><i class="fas fa-hospital me-1"></i> Hospitals</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}#contact-us"><i class="fas fa-envelope me-1"></i> Contact</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link donate-btn" href="{% url 'donate' %}">
+                            <i class="fas fa-heart me-1"></i> Donate Blood
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link auth-btn" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt me-1"></i> Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link auth-btn" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link auth-btn" href="{% url 'register' %}"><i class="fas fa-user-plus me-1"></i> Register</a></li>
+                        <li class="nav-item"><a class="nav-link auth-btn" href="{% url 'login' %}"><i class="fas fa-sign-in-alt me-1"></i> Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Preloader + Smooth scroll -->
+    <script>
+        $(window).on("load", function () {
+            $("#preloader").fadeOut(500);
+        });
+
+        $(".nav-link").on("click", function (event) {
+            if (this.hash !== "") {
+                event.preventDefault();
+                const hash = this.hash;
+                $("html, body").animate({
+                    scrollTop: $(hash).offset().top - $(".navbar").outerHeight()
+                }, 200, function () {
+                    window.location.hash = hash;
+                });
+            }
+        });
+    </script>
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+    
+</body>
+</html>

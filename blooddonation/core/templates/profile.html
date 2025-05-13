@@ -1,0 +1,506 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .profile-header {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .profile-header::before {
+        content: '';
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        top: -100px;
+        right: -50px;
+        border-radius: 50%;
+    }
+    
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 5px solid white;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        object-fit: cover;
+        margin-right: 2rem;
+    }
+    
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        overflow: hidden;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    }
+    
+    .card-header {
+        background: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1.25rem 1.5rem;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .badge {
+        padding: 0.4rem 0.8rem;
+        border-radius: 50px;
+        font-weight: 500;
+        font-size: 0.75rem;
+    }
+    
+    .form-control {
+        border-radius: 10px;
+        padding: 0.6rem 1rem;
+        border: 1px solid #e1e5eb;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        box-shadow: 0 0 0 4px rgba(255, 94, 98, 0.1);
+        border-color: #ff5e62;
+    }
+    
+    .btn-gradient {
+        background: linear-gradient(145deg, #ff5e62 0%, #ff9966 100%);
+        border: none;
+        color: white;
+        border-radius: 50px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(255, 94, 98, 0.3);
+        transition: all 0.3s;
+    }
+    
+    .btn-gradient:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(255, 94, 98, 0.4);
+    }
+    
+    .btn-outline {
+        border: 2px solid #ff5e62;
+        color: #ff5e62;
+        background: transparent;
+        border-radius: 50px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .btn-outline:hover {
+        background: rgba(255, 94, 98, 0.1);
+    }
+    
+    .donation-card {
+        border-left: 4px solid #ff5e62;
+        transition: all 0.3s;
+    }
+    
+    .donation-card:hover {
+        border-left-width: 8px;
+    }
+    
+    .table {
+        border-collapse: separate;
+        border-spacing: 0 0.5rem;
+    }
+    
+    .table tr {
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s;
+    }
+    
+    .table tr:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    .table td, .table th {
+        padding: 1rem;
+        border: none;
+        background: white;
+    }
+    
+    .table th {
+        font-weight: 600;
+        color: #444;
+    }
+    
+    .table tr td:first-child {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    
+    .table tr td:last-child {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+    
+    .stats-card {
+        padding: 1.5rem;
+        border-radius: 15px;
+        background: white;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s;
+        border-left: 4px solid transparent;
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .stats-card.primary {
+        border-left-color: #ff5e62;
+    }
+    
+    .stats-card.warning {
+        border-left-color: #ffbe0b;
+    }
+    
+    .stats-card.success {
+        border-left-color: #40916c;
+    }
+    
+    .stats-card .number {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stats-card .label {
+        color: #6c757d;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    /* Cool input field effect */
+    .form-floating > .form-control:focus,
+    .form-floating > .form-control:not(:placeholder-shown) {
+        padding-top: 1.625rem;
+        padding-bottom: 0.625rem;
+    }
+    
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        opacity: .65;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+    }
+</style>
+
+<div class="container mt-5 pt-5">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                <div class="d-flex align-items-center">
+                    {% if message.tags == 'success' %}
+                        <i class="fas fa-check-circle me-2"></i>
+                    {% elif message.tags == 'error' %}
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                    {% endif %}
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Profile Header -->
+    <div class="profile-header d-flex align-items-center mb-4">
+        <div class="profile-image-wrapper me-4" style="position: relative; display: inline-block;">
+            <!-- Soft glow effect behind image -->
+            <div style="position: absolute; width: 160px; height: 160px; background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; top: -10px; left: -10px; filter: blur(10px);"></div>
+            <!-- Default profile image if user doesn't have one -->
+            <img src="https://img.icons8.com/color/96/null/user-male-circle--v1.png" class="profile-avatar" alt="{{ user.username }}">
+        </div>
+        <div>
+            <h2 class="fw-bold mb-1">{{ user.first_name }} {{ user.last_name }}</h2>
+            <p class="mb-1 opacity-75"><i class="fas fa-envelope me-2"></i>{{ user.email }}</p>
+            <p class="mb-2 opacity-75"><i class="fas fa-map-marker-alt me-2"></i>{{ user.city }}</p>
+            <div class="d-flex mt-3">
+                <span class="badge bg-light text-dark me-2"><i class="fas fa-tint me-1" style="color: #ff5e62;"></i> {{ user.blood_group }}</span>
+                <span class="badge bg-light text-dark me-2"><i class="fas fa-calendar-check me-1" style="color: #ff5e62;"></i> {{ donations.count }} Donations</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Left Column - Profile Stats -->
+        <div class="col-lg-4 mb-4">
+            <div class="stats-card primary shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="label">Total Donations</div>
+                        <div class="number">{{ donations.count }}</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-hand-holding-medical fa-2x" style="color: rgba(255, 94, 98, 0.2);"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-card warning shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="label">Total Blood Donated</div>
+                        <div class="number">{{ donations_total_ml|default:"0" }} ml</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-tint fa-2x" style="color: rgba(255, 190, 11, 0.2);"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stats-card success shadow-sm">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="label">Last Donation</div>
+                        <div class="number">{{ last_donation_date|default:"None" }}</div>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-calendar-alt fa-2x" style="color: rgba(64, 145, 108, 0.2);"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Eligibility Status</h5>
+                    <i class="fas fa-check-circle text-success"></i>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Next eligible donation date:</span>
+                        <span class="fw-bold">{{ next_eligible_date|default:"Available now" }}</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 10px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <div class="text-center">
+                        <a href="{% url 'donate' %}" class="btn btn-gradient">
+                            <i class="fas fa-donate me-2"></i>Donate Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Column - Profile Form & Donation History -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-user me-2" style="color: #ff5e62;"></i>Profile Information</h5>
+                    <button class="btn btn-outline" id="editToggle">
+                        <i class="fas fa-pencil-alt me-2"></i>Edit Profile
+                    </button>
+                </div>
+                <div class="card-body">
+                    <form method="POST" id="profileForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" placeholder="First Name" readonly>
+                                    <label for="first_name">First Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" placeholder="Last Name" readonly>
+                                    <label for="last_name">Last Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="username" value="{{ user.username }}" placeholder="Username" readonly>
+                                    <label for="username">Username</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" placeholder="Email" readonly>
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="{{ user.phone }}" placeholder="Phone Number" readonly>
+                                    <label for="phone">Phone Number</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="blood_group" name="blood_group" disabled>
+                                        {% for choice in user.BLOOD_GROUP_CHOICES %}
+                                            <option value="{{ choice.0 }}" {% if user.blood_group == choice.0 %}selected{% endif %}>
+                                                {{ choice.1 }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="blood_group">Blood Group</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="city" name="city" value="{{ user.city }}" placeholder="City" readonly>
+                                    <label for="city">City</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <select class="form-select" id="security_question" name="security_question" disabled>
+                                        {% for choice in security_questions %}
+                                            <option value="{{ choice.0 }}" {% if user.security_question == choice.0 %}selected{% endif %}>
+                                                {{ choice.1 }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="security_question">Security Question</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="securityAnswerField" style="display: none;">
+                                <div class="form-floating mb-3">
+                                    <input type="password" class="form-control" id="security_answer" name="security_answer" placeholder="Security Answer" autocomplete="new-password">
+                                    <label for="security_answer">Security Answer</label>
+                                    <small class="form-text text-muted">Leave blank to keep current answer</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-end mt-3" id="editButtons" style="display: none;">
+                            <button type="button" class="btn btn-light me-2" id="cancelEdit">Cancel</button>
+                            <button type="submit" class="btn btn-gradient">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Donation History -->
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-history me-2" style="color: #ff5e62;"></i>Donation History</h5>
+                    <span class="badge bg-light text-dark">{{ donations.count }} Total</span>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Blood Group</th>
+                                    <th>Amount (ml)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for donation in donations %}
+                                <tr>
+                                    <td>{{ donation.date }}</td>
+                                    <td><span class="badge bg-light text-dark"><i class="fas fa-tint me-1" style="color: #ff5e62;"></i> {{ donation.blood_group }}</span></td>
+                                    <td>{{ donation.amount_ml }} ml</td>
+                                    <td>
+                                        {% if donation.status == 'Approved' %}
+                                            <span class="badge bg-success">{{ donation.status }}</span>
+                                        {% elif donation.status == 'Pending' %}
+                                            <span class="badge bg-warning text-dark">{{ donation.status }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ donation.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <i class="fas fa-tint-slash fa-3x mb-3" style="color: #ddd;"></i>
+                                            <p class="mb-3">No donations recorded yet.</p>
+                                            <a href="{% url 'donate' %}" class="btn btn-gradient btn-sm">
+                                                <i class="fas fa-plus me-2"></i>Make Your First Donation
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const profileForm = document.getElementById('profileForm');
+    const editToggle = document.getElementById('editToggle');
+    const editButtons = document.getElementById('editButtons');
+    const cancelEdit = document.getElementById('cancelEdit');
+    const securityAnswerField = document.getElementById('securityAnswerField');
+    const inputs = document.querySelectorAll('#profileForm input:not([readonly])');
+    const selects = document.querySelectorAll('#profileForm select');
+    
+    // Edit toggle functionality
+    editToggle.addEventListener('click', function() {
+        // Enable all form fields
+        document.querySelectorAll('#profileForm input:not(#username)').forEach(input => {
+            input.removeAttribute('readonly');
+        });
+        
+        // Enable all select fields
+        selects.forEach(select => {
+            select.disabled = false;
+        });
+        
+        // Show the security answer field and buttons
+        securityAnswerField.style.display = 'block';
+        editButtons.style.display = 'block';
+        editToggle.style.display = 'none';
+    });
+
+    // Cancel button functionality
+    cancelEdit.addEventListener('click', function() {
+        // Disable all input fields
+        document.querySelectorAll('#profileForm input:not(#username)').forEach(input => {
+            input.setAttribute('readonly', true);
+        });
+        
+        // Disable all select fields
+        selects.forEach(select => {
+            select.disabled = true;
+        });
+        
+        // Hide the security answer field and buttons
+        securityAnswerField.style.display = 'none';
+        editButtons.style.display = 'none';
+        editToggle.style.display = 'block';
+        profileForm.reset();
+    });
+});
+</script>
+{% endblock %}
